@@ -57,11 +57,9 @@ final class RemoteFeedLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteFeedLoader.Error]()
-        sut.load { error in capturedErrors.append(error) }
-        client.complete(with: NSError())
-        
-        XCTAssertEqual(capturedErrors, [.connectivity])
+        expect(sut, toCompleteWithError: .connectivity) {
+            client.complete(with: NSError())
+        }
     }
 
     func test_load_deliversErrorOnNon200HttpResponse() {
@@ -81,6 +79,16 @@ final class RemoteFeedLoaderTests: XCTestCase {
         }
     }
     
+    func test_load_deliversNoItemsOn200WithEmptyJSONList() {
+        let (sut, client) = makeSUT()
+        
+        expect(sut, toCompleteWith: []) {
+            client.complete(with: 200, data: #"{"items": []}"#.data(using: .utf8)!)
+        }
+    }
+    
+    // MARK: - Helpers
+    
     func expect(
         _ sut: RemoteFeedLoader,
         toCompleteWithError error: RemoteFeedLoader.Error,
@@ -88,12 +96,28 @@ final class RemoteFeedLoaderTests: XCTestCase {
         line: UInt = #line,
         when action: () -> Void
     ) {
-        var capturedErrors = [RemoteFeedLoader.Error]()
+        var results = [RemoteFeedLoaderResult]()
         
-        sut.load { _error in capturedErrors.append(_error) }
+        sut.load { result in results.append(result) }
         action()
         
-        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
+        XCTAssertEqual(results, [.failure(error)], file: file, line: line)
+    }
+    
+    
+    func expect(
+        _ sut: RemoteFeedLoader,
+        toCompleteWith items: [FeedItem],
+        file: StaticString = #file,
+        line: UInt = #line,
+        when action: () -> Void
+    ) {
+        var results = [RemoteFeedLoaderResult]()
+        
+        sut.load { result in results.append(result) }
+        action()
+        
+        XCTAssertEqual(results, [.success(items)], file: file, line: line)
     }
     
     func makeSUT(url: URL = URL(string: "http://test.com")!) -> (RemoteFeedLoader, HTTPClientSpy) {
