@@ -17,12 +17,17 @@ public final class RemoteFeedLoader {
     }
     
     public func load(completion: @escaping (RemoteFeedLoader.Error) -> Void) {
-        client.get(from: url) { _ in
-            completion(.connectivity)
+        client.get(from: url) { res, error in
+            if error != nil {
+                completion(.connectivity)
+            } else if res?.statusCode != 200 {
+                completion(.invalidData)
+            }
         }
     }
     
     public enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
 }
