@@ -16,7 +16,7 @@ extension XCTestCase {
     ) -> T {
         let instance = initializer()
         addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, file: file, line: line)
+            XCTAssertNil(instance, "Instance \(String(describing: instance)) should have been deallocated.", file: file, line: line)
         }
         return instance
     }
