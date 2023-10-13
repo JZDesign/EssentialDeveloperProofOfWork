@@ -8,8 +8,12 @@
 import Foundation
 
 enum FeedItemsMapper {
+    private static func isOK(_ code: Int) -> Bool {
+        code == 200
+    }
+
     static func map(_ data: Data, response: HTTPURLResponse) -> [FeedItem]? {
-        if response.statusCode == 200, let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedItem) {
+        if isOK(response.statusCode), let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedItem) {
             return items
         } else {
             return nil
