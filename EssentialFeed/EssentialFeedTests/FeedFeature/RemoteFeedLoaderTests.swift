@@ -115,8 +115,8 @@ final class RemoteFeedLoaderTests: XCTestCase {
     }
     
     private func makeSUT(url: URL = URL(string: "http://test.com")!) -> (RemoteFeedLoader, HTTPClientSpy) {
-        let client = HTTPClientSpy()
-        let sut = RemoteFeedLoader(url: url, client: client)
+        let client = createAndTrackMemoryLeaks(HTTPClientSpy())
+        let sut = createAndTrackMemoryLeaks(RemoteFeedLoader(url: url, client: client))
         return (sut, client)
     }
 }
