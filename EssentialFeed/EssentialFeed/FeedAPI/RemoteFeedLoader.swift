@@ -22,7 +22,7 @@ public final class RemoteFeedLoader {
         client.get(from: url) {
             switch $0 {
             case .success(let result):
-                if result.response.statusCode == 200, let items = try? JSONDecoder().decode(Root.self, from: result.data).items.map(\.asFeedItem) {
+                if let items = FeedItemsMapper.map(result.data, response: result.response) {
                     completion(.success(items))
                 } else {
                     completion(.failure(.invalidData))
@@ -36,6 +36,17 @@ public final class RemoteFeedLoader {
     public enum Error: Swift.Error {
         case connectivity
         case invalidData
+    }
+}
+
+
+enum FeedItemsMapper {
+    static func map(_ data: Data, response: HTTPURLResponse) -> [FeedItem]? {
+        if response.statusCode == 200, let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedItem) {
+            return items
+        } else {
+            return nil
+        }
     }
     
     struct Root: Decodable {
