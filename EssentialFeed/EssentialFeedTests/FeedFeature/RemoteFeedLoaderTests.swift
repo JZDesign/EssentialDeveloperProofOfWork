@@ -9,22 +9,22 @@ import XCTest
 import EssentialFeed
 
 class HTTPClientSpy: HTTPClient {
-    var messages = [(url: URL, completion: (HTTPURLResponse?, Error?) -> Void)]()
+    var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
     var requestedURLs: [URL] {
         messages.map(\.url)
     }
 
-    func get(from url: URL, completion: @escaping (HTTPURLResponse?, Error?) -> Void) {
+    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
         messages.append((url, completion))
     }
     
     func complete(with error: Error, at index: Int = 0) {
-        messages[index].completion(nil, error)
+        messages[index].completion(.failure(error))
     }
     
     func complete(with statusCode: Int, at index: Int = 0) {
-        let response = HTTPURLResponse(url: requestedURLs[index], statusCode: statusCode, httpVersion: nil, headerFields: .none)
-        messages[index].completion(response, nil)
+        let response = HTTPURLResponse(url: requestedURLs[index], statusCode: statusCode, httpVersion: nil, headerFields: .none)!
+        messages[index].completion(.success(response))
     }
 }
 
