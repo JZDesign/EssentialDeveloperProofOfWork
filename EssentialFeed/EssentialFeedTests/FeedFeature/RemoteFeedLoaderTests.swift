@@ -29,7 +29,7 @@ class HTTPClientSpy: HTTPClient {
 }
 
 final class RemoteFeedLoaderTests: XCTestCase {
-
+    
     func test_init_doesNotRequestDataFromURL() {
         let (_, client) = makeSUT()
         
@@ -47,7 +47,7 @@ final class RemoteFeedLoaderTests: XCTestCase {
     func test_load_requestsDataFromURLTwice() {
         let (sut, client) = makeSUT()
         let url = URL(string: "http://test.com")!
-
+        
         sut.load { _ in }
         sut.load { _ in }
         
@@ -61,7 +61,7 @@ final class RemoteFeedLoaderTests: XCTestCase {
             client.complete(with: NSError())
         }
     }
-
+    
     func test_load_deliversErrorOnNon200HttpResponse() {
         [199, 201, 400, 500].forEach { statusCode in
             let (sut, client) = makeSUT()
@@ -87,7 +87,34 @@ final class RemoteFeedLoaderTests: XCTestCase {
         }
     }
     
+    
+    func test_load_deliversItemsOn200WithJSONList() {
+        let (sut, client) = makeSUT()
+        let item1 = makeItem(description: "1", location: "1", imageURL: URL(string: "http://test1.com")!)
+        let item2 = makeItem(description: "2", location: "2", imageURL: URL(string: "http://test2.com")!)
+        
+        let jsonObject = ["items": [ item1.json, item2.json ]]
+        
+        expect(sut, toCompleteWith: .success([item1.item, item2.item])) {
+            client.complete(with: 200, data: try! JSONSerialization.data(withJSONObject: jsonObject))
+        }
+    }
+    
     // MARK: - Helpers
+    
+    func makeItem(id: UUID = .init(), description: String? = nil, location: String? = nil, imageURL: URL) -> (item: FeedItem, json: [String : Encodable]) {
+        let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+        return (item, jsonItem(for: item))
+    }
+    
+    func jsonItem(for item: FeedItem) -> [String : Encodable] {
+        [
+            "id": item.id.uuidString,
+            "description": item.description,
+            "location": item.location,
+            "image": item.imageURL.absoluteString
+        ]
+    }
     
     func expect(
         _ sut: RemoteFeedLoader,
