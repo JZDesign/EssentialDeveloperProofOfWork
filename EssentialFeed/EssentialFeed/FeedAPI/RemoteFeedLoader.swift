@@ -38,29 +38,3 @@ public final class RemoteFeedLoader {
         case invalidData
     }
 }
-
-
-enum FeedItemsMapper {
-    static func map(_ data: Data, response: HTTPURLResponse) -> [FeedItem]? {
-        if response.statusCode == 200, let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedItem) {
-            return items
-        } else {
-            return nil
-        }
-    }
-    
-    struct Root: Decodable {
-        let items: [Item]
-        
-        struct Item: Decodable {
-            let id: UUID
-            let description: String?
-            let location: String?
-            let image: URL
-            
-            var asFeedItem: FeedItem {
-                .init(id: id, description: description, location: location, imageURL: image)
-            }
-        }
-    }
-}
