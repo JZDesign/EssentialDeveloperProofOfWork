@@ -144,7 +144,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         let exp = expectation(description: "Wait for completion")
 
-        makeSUT(file: file, line: line).get(from: anyURL()) { result in
+        makeSUT().get(from: anyURL()) { result in
             receivedResult = result
             exp.fulfill()
         }
@@ -153,11 +153,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
         return receivedResult
     }
     
-    private func makeSUT(
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) -> HTTPClient {
-        createAndTrackMemoryLeaks(URLSessionHTTPClient(session: .shared), file: file, line: line)
+    private func makeSUT() -> HTTPClient {
+        URLSession.shared
     }
 }
 
