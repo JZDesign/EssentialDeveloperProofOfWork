@@ -78,13 +78,20 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func assert(receivedResponse: HTTPURLResponse, equals response: HTTPURLResponse) {
-        XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
-        XCTAssertEqual(receivedResponse.url, response.url)
-        XCTAssertEqual(receivedResponse.mimeType, response.mimeType)
+    private func assert(
+        receivedResponse: HTTPURLResponse,
+        equals response: HTTPURLResponse,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        XCTAssertEqual(receivedResponse.statusCode, response.statusCode, file: file, line: line)
+        XCTAssertEqual(receivedResponse.url, response.url, file: file, line: line)
+        XCTAssertEqual(receivedResponse.mimeType, response.mimeType, file: file, line: line)
         XCTAssertEqual(
             receivedResponse.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
-            response.allHeaderFields.map { [$0.key: String(describing: $0.value)]}
+            response.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
+            file: file,
+            line: line
         )
     }
     
