@@ -63,7 +63,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         let data = anyData()
         let response = anyHttpResponse()
         
-        let (receivedResponse, receivedData) = successFor(data: data, response: response)!
+        let (receivedResponse, receivedData) = resultValuesFor(data: data, response: response)!
         XCTAssertEqual(receivedData, data)
         XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
         XCTAssertEqual(receivedResponse.url, response.url)
@@ -77,7 +77,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
     func test_getFromURL_succeedsOnEmptyDataResponseWithNilData() {
         let response = anyHttpResponse()
         
-        let (receivedResponse, receivedData) = successFor(data: nil, response: response)!
+        let (receivedResponse, receivedData) = resultValuesFor(data: nil, response: response)!
         XCTAssertEqual(receivedData, Data())
         XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
         XCTAssertEqual(receivedResponse.url, response.url)
@@ -90,7 +90,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func successFor(
+    private func resultValuesFor(
         data: Data?,
         response: URLResponse?,
         file: StaticString = #filePath,
