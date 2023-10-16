@@ -88,8 +88,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertEqual(receivedResponse.url, response.url, file: file, line: line)
         XCTAssertEqual(receivedResponse.mimeType, response.mimeType, file: file, line: line)
         XCTAssertEqual(
-            receivedResponse.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
-            response.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
+            receivedResponse.allHeaderFields.mapValues { String(describing: $0) },
+            response.allHeaderFields.mapValues { String(describing: $0) },
             file: file,
             line: line
         )
