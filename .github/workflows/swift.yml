@@ -17,4 +17,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build & Test
-      run: xcodebuild test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI"
+      run: xcodebuild test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGNING_REQUIRED=NO
