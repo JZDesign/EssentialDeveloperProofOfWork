@@ -51,7 +51,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
     func test_getFromURL_failsOnAllInvalidRepresentationCases() {
         XCTAssertNotNil(resultErrorFor(data: nil, response: nil, error: nil))
         XCTAssertNotNil(resultErrorFor(data: nil, response: nonHttpResponse(), error: nil))
-        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHttpResponse(), error: nil))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: nil))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: nil, response: nonHttpResponse(), error: anyNSError()))
@@ -60,7 +59,49 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: nonHttpResponse(), error: nil))
     }
 
+    func test_getFromURL_succeedsOnHTTPURLResponseWithData() {
+        let data = anyData()
+        let response = anyHttpResponse()
+        
+        let (receivedResponse, receivedData) = successFor(data: data, response: response)!
+        XCTAssertEqual(receivedData, data)
+        XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
+        XCTAssertEqual(receivedResponse.url, response.url)
+        XCTAssertEqual(receivedResponse.mimeType, response.mimeType)
+        XCTAssertEqual(
+            receivedResponse.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
+            response.allHeaderFields.map { [$0.key: String(describing: $0.value)]}
+        )
+    }
+    
     // MARK: - Helpers
+    
+    private func successFor(
+        data: Data?,
+        response: URLResponse?,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (response: HTTPURLResponse, data: Data)? {
+        var receivedResponse: (response: HTTPURLResponse, data: Data)?
+
+        URLProtocolStub.stub(url: anyURL(), data: data, response: response, error: nil)
+        
+        let exp = expectation(description: "Wait for completion")
+
+        makeSUT(file: file, line: line).get(from: anyURL()) { result in
+            switch result {
+            case let .success(res):
+                receivedResponse = res
+            default:
+                XCTFail("Expected success, got \(result) instead", file: file, line: line)
+            }
+
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1.0)
+        return receivedResponse
+    }
     
     private func resultErrorFor(
         data: Data?,
@@ -96,7 +137,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
     ) -> URLSessionHTTPClient {
         createAndTrackMemoryLeaks(URLSessionHTTPClient(session: .shared), file: file, line: line)
     }
-
 }
 
 class URLSessionHTTPClient: HTTPClient {
@@ -110,9 +150,11 @@ class URLSessionHTTPClient: HTTPClient {
     struct UnexpectedValuesRepresentation: Error {}
     
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-        session.dataTask(with: url) { _, _, error in
+        session.dataTask(with: url) { data, response, error in
             if let error {
                 completion(.failure(error))
+            } else if let data, let response = response as? HTTPURLResponse {
+                completion(.success((response, data)))
             } else {
                 completion(.failure(UnexpectedValuesRepresentation()))
             }
