@@ -25,3 +25,20 @@ extension XCTestCase {
 func anyURL() -> URL {
     URL(string: "https://test.com")!
 }
+
+func anyData() -> Data {
+    "oh hey".data(using: .utf8)!
+}
+
+func anyNSError() -> NSError {
+    NSError(domain: "1", code: 1)
+}
+
+func anyHttpResponse() -> HTTPURLResponse {
+    HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
+}
+
+func nonHttpResponse() -> URLResponse {
+    URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+}
+
