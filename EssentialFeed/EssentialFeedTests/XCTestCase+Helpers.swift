@@ -21,3 +21,7 @@ extension XCTestCase {
         return instance
     }
 }
+
+func anyURL() -> URL {
+    URL(string: "https://test.com")!
+}
