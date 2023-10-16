@@ -74,6 +74,20 @@ final class URLSessionHTTPClientTests: XCTestCase {
         )
     }
     
+    func test_getFromURL_succeedsOnEmptyDataResponseWithNilData() {
+        let response = anyHttpResponse()
+        
+        let (receivedResponse, receivedData) = successFor(data: nil, response: response)!
+        XCTAssertEqual(receivedData, Data())
+        XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
+        XCTAssertEqual(receivedResponse.url, response.url)
+        XCTAssertEqual(receivedResponse.mimeType, response.mimeType)
+        XCTAssertEqual(
+            receivedResponse.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
+            response.allHeaderFields.map { [$0.key: String(describing: $0.value)]}
+        )
+    }
+    
     // MARK: - Helpers
     
     private func successFor(
