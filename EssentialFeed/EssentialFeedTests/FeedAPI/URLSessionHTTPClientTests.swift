@@ -32,14 +32,14 @@ final class URLSessionHTTPClientTests: XCTestCase {
             exp.fulfill()
         }
 
-        URLSessionHTTPClient(session: .shared).get(from: url) { _ in }
+        makeSUT().get(from: url) { _ in }
           
         wait(for: [exp], timeout: 1.0)
         
     }
     
     func test_getFromURL_failsOnRequestError() {
-        let sut = URLSessionHTTPClient(session: .shared)
+        let sut = makeSUT()
         let url = URL(string: "http://any-url.com")!
         let error = NSError(domain: "any error", code: 1)
         
@@ -60,6 +60,14 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
 
         wait(for: [exp], timeout: 1.0)
+    }
+
+
+    private func makeSUT(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> URLSessionHTTPClient {
+        createAndTrackMemoryLeaks(URLSessionHTTPClient(session: .shared), file: file, line: line)
     }
 
 }
