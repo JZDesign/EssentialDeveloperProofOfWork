@@ -15,10 +15,14 @@ extension XCTestCase {
         line: UInt = #line
     ) -> T {
         let instance = initializer()
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance \(String(describing: instance)) should have been deallocated.", file: file, line: line)
-        }
+        trackForMemoryLeaks(instance, file: file, line: line)
         return instance
+    }
+    
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+        }
     }
 }
 
