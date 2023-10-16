@@ -161,28 +161,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
 }
 
-class URLSessionHTTPClient: HTTPClient {
-    
-    private let session: URLSession
-    
-    init(session: URLSession) {
-        self.session = session
-    }
-    
-    struct UnexpectedValuesRepresentation: Error {}
-    
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-        session.dataTask(with: url) { data, response, error in
-            if let error {
-                completion(.failure(error))
-            } else if let data, let response = response as? HTTPURLResponse {
-                completion(.success((response, data)))
-            } else {
-                completion(.failure(UnexpectedValuesRepresentation()))
-            }
-        }.resume()
-    }
-}
 
 class URLProtocolStub: URLProtocol {
     private static var stub: Stub? = nil
