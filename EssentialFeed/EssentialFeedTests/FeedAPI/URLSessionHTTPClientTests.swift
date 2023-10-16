@@ -65,13 +65,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         let (receivedResponse, receivedData) = resultValuesFor(data: data, response: response)!
         XCTAssertEqual(receivedData, data)
-        XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
-        XCTAssertEqual(receivedResponse.url, response.url)
-        XCTAssertEqual(receivedResponse.mimeType, response.mimeType)
-        XCTAssertEqual(
-            receivedResponse.allHeaderFields.map { [$0.key: String(describing: $0.value)]},
-            response.allHeaderFields.map { [$0.key: String(describing: $0.value)]}
-        )
+        assert(receivedResponse: receivedResponse, equals: response)
     }
     
     func test_getFromURL_succeedsOnEmptyDataResponseWithNilData() {
@@ -79,6 +73,12 @@ final class URLSessionHTTPClientTests: XCTestCase {
         
         let (receivedResponse, receivedData) = resultValuesFor(data: nil, response: response)!
         XCTAssertEqual(receivedData, Data())
+        assert(receivedResponse: receivedResponse, equals: response)
+    }
+    
+    // MARK: - Helpers
+    
+    private func assert(receivedResponse: HTTPURLResponse, equals response: HTTPURLResponse) {
         XCTAssertEqual(receivedResponse.statusCode, response.statusCode)
         XCTAssertEqual(receivedResponse.url, response.url)
         XCTAssertEqual(receivedResponse.mimeType, response.mimeType)
@@ -87,8 +87,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
             response.allHeaderFields.map { [$0.key: String(describing: $0.value)]}
         )
     }
-    
-    // MARK: - Helpers
     
     private func resultValuesFor(
         data: Data?,
