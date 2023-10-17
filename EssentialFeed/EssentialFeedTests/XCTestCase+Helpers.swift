@@ -31,6 +31,19 @@ func uniqueItem() -> FeedItem {
     FeedItem(id: UUID(), description: "any", location: "any", imageURL: anyURL())
 }
 
+
+func uniqueItems() -> (remote: [FeedItem], local: [LocalFeedItem]) {
+    let remote = [
+        uniqueItem(),
+        uniqueItem(),
+        uniqueItem(),
+        uniqueItem(),
+        uniqueItem(),
+        uniqueItem(),
+    ]
+    return (remote, remote.map(\.asLocal))
+}
+
 func anyURL() -> URL {
     URL(string: "https://test.com")!
 }

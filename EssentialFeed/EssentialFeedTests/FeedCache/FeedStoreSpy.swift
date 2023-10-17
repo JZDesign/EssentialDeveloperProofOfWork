@@ -19,7 +19,7 @@ class FeedStoreSpy: FeedStore {
         recievedMessages.append(.deleteCachedFeed)
     }
     
-    func insertItems(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion) {
+    func insertItems(_ items: [LocalFeedItem], timestamp: Date, completion: @escaping InsertionCompletion) {
         insertionCompletions.append(completion)
         recievedMessages.append(.insert(items, timestamp))
     }
@@ -42,6 +42,6 @@ class FeedStoreSpy: FeedStore {
     
     enum ReceivedMessage: Equatable {
         case deleteCachedFeed
-        case insert([FeedItem], Date)
+        case insert([LocalFeedItem], Date)
     }
 }
