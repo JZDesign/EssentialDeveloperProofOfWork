@@ -21,17 +21,19 @@ enum FeedItemsMapper {
     }
     
     private struct Root: Decodable {
-        let items: [Item]
-        
-        struct Item: Decodable {
-            let id: UUID
-            let description: String?
-            let location: String?
-            let image: URL
-            
-            var asFeedItem: FeedItem {
-                .init(id: id, description: description, location: location, imageURL: image)
-            }
-        }
+        let items: [RemoteFeedItem]
+    }
+}
+
+struct RemoteFeedItem: Decodable {
+    let id: UUID
+    let description: String?
+    let location: String?
+    let image: URL
+}
+
+private extension RemoteFeedItem {
+    var asFeedItem: FeedItem {
+        .init(id: id, description: description, location: location, imageURL: image)
     }
 }
