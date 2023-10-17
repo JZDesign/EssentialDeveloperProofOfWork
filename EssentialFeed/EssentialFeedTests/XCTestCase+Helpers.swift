@@ -5,6 +5,7 @@
 //  Created by Jacob Rakidzich on 10/13/23.
 //
 
+import EssentialFeed
 import Foundation
 import XCTest
 
@@ -24,6 +25,10 @@ extension XCTestCase {
             XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
         }
     }
+}
+
+func uniqueItem() -> FeedItem {
+    FeedItem(id: UUID(), description: "any", location: "any", imageURL: anyURL())
 }
 
 func anyURL() -> URL {
