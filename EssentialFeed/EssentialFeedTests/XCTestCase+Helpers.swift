@@ -27,19 +27,19 @@ extension XCTestCase {
     }
 }
 
-func uniqueItem() -> FeedItem {
-    FeedItem(id: UUID(), description: "any", location: "any", imageURL: anyURL())
+func uniqueImage() -> FeedImage {
+    FeedImage(id: UUID(), description: "any", location: "any", imageURL: anyURL())
 }
 
 
-func uniqueItems() -> (remote: [FeedItem], local: [LocalFeedItem]) {
+func uniqueImages() -> (remote: [FeedImage], local: [LocalFeedImage]) {
     let remote = [
-        uniqueItem(),
-        uniqueItem(),
-        uniqueItem(),
-        uniqueItem(),
-        uniqueItem(),
-        uniqueItem(),
+        uniqueImage(),
+        uniqueImage(),
+        uniqueImage(),
+        uniqueImage(),
+        uniqueImage(),
+        uniqueImage(),
     ]
     return (remote, remote.map(\.asLocal))
 }

@@ -17,27 +17,27 @@ public class LocalFeedLoader {
         self.currentDate = currentDate
     }
 
-    public func save(_ items: [FeedItem], completion: @escaping SaveResult = { _ in }) {
+    public func save(_ images: [FeedImage], completion: @escaping SaveResult = { _ in }) {
         store.deleteCachedFeed { [weak self] error in
             guard let self else { return }
             if let error {
                 completion(error)
             } else {
-                self.cache(items, with: completion)
+                self.cache(images, with: completion)
             }
         }
     }
     
-    private func cache(_ items: [FeedItem], with completion: @escaping SaveResult) {
-        store.insertItems(items.map(\.asLocal), timestamp: currentDate()) { [weak self] error in
+    private func cache(_ images: [FeedImage], with completion: @escaping SaveResult) {
+        store.insertImages(images.map(\.asLocal), timestamp: currentDate()) { [weak self] error in
             guard self != nil else { return }
             completion(error)
         }
     }
 }
 
-public extension FeedItem {
-    var asLocal: LocalFeedItem {
+public extension FeedImage {
+    var asLocal: LocalFeedImage {
         .init(id: id, description: description, location: location, imageURL: imageURL)
     }
 }

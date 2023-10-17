@@ -12,8 +12,8 @@ enum FeedItemsMapper {
         code == 200
     }
 
-    static func map(_ data: Data, response: HTTPURLResponse) -> [FeedItem]? {
-        if isOK(response.statusCode), let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedItem) {
+    static func map(_ data: Data, response: HTTPURLResponse) -> [FeedImage]? {
+        if isOK(response.statusCode), let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedImage) {
             return items
         } else {
             return nil
@@ -33,7 +33,7 @@ struct RemoteFeedItem: Decodable {
 }
 
 private extension RemoteFeedItem {
-    var asFeedItem: FeedItem {
+    var asFeedImage: FeedImage {
         .init(id: id, description: description, location: location, imageURL: image)
     }
 }

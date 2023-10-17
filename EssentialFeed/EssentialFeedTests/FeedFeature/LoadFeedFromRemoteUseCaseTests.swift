@@ -68,13 +68,13 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     }
     
     
-    func test_load_deliversItemsOn200WithJSONList() {
+    func test_load_deliversImagesOn200WithJSONList() {
         let (sut, client) = makeSUT()
-        let item1 = makeItem(imageURL: URL(string: "http://test1.com")!)
-        let item2 = makeItem(description: "2", location: "2", imageURL: URL(string: "http://test2.com")!)
+        let image = makeImage(imageURL: URL(string: "http://test1.com")!)
+        let image2 = makeImage(description: "2", location: "2", imageURL: URL(string: "http://test2.com")!)
         
-        expect(sut, toCompleteWith: .success([item1.model, item2.model])) {
-            let json = makeItemsJson(items: [item1.json, item2.json])
+        expect(sut, toCompleteWith: .success([image.model, image2.model])) {
+            let json = makeItemsJson(items: [image.json, image2.json])
             client.complete(with: 200, data: try! JSONSerialization.data(withJSONObject: json))
         }
     }
@@ -93,8 +93,8 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeItem(id: UUID = .init(), description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedItem, json: [String : Encodable]) {
-        let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+    private func makeImage(id: UUID = .init(), description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String : Encodable]) {
+        let item = FeedImage(id: id, description: description, location: location, imageURL: imageURL)
         return (item, jsonItem(for: item))
     }
     
@@ -102,7 +102,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         ["items": items]
     }
     
-    private func jsonItem(for item: FeedItem) -> [String : Encodable] {
+    private func jsonItem(for item: FeedImage) -> [String : Encodable] {
         [
             "id": item.id.uuidString,
             "description": item.description,
