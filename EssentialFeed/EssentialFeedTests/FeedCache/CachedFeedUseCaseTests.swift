@@ -52,11 +52,31 @@ final class CachedFeedUseCaseTests: XCTestCase {
         }
         
         store.completeDeletion(with: expectedError)
+
         wait(for: [expectation])
         
         XCTAssertEqual(expectedError, recievedError as! EquatableError)
     }
     
+    
+    func test_save_failsOnInsertionError() {
+        let expectedError = EquatableError()
+        let (sut, store) = makeSUT()
+        var recievedError: Error?
+        
+        let expectation = expectation(description: #function)
+        
+        sut.save([]) {
+            recievedError = $0
+            expectation.fulfill()
+        }
+        
+        store.completeDeletionSuccessfully()
+        store.completeInsertion(with: expectedError)
+        wait(for: [expectation])
+        
+        XCTAssertEqual(expectedError, recievedError as! EquatableError)
+    }
     // MARK: Helpers
     
     func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
@@ -71,6 +91,9 @@ class FeedStore {
     typealias DeletionCompletion = (Error?) -> Void
     var deletionCompletions = [DeletionCompletion]()
     
+    typealias InsertionCompletion = (Error?) -> Void
+    var insertionCompletions = [InsertionCompletion]()
+    
     private(set) var recievedMessages = [ReceivedMessage]()
     
     func deleteCachedFeed(completion: @escaping DeletionCompletion) {
@@ -78,12 +101,17 @@ class FeedStore {
         recievedMessages.append(.deleteCachedFeed)
     }
     
-    func insertItems(_ items: [FeedItem], timestamp: Date) {
+    func insertItems(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion) {
+        insertionCompletions.append(completion)
         recievedMessages.append(.insert(items, timestamp))
     }
     
     func completeDeletion(with error: Error, at index: Int = 0) {
         deletionCompletions[index](error)
+    }
+    
+    func completeInsertion(with error: Error, at index: Int = 0) {
+        insertionCompletions[index](error)
     }
     
     func completeDeletionSuccessfully(at index: Int = 0) {
@@ -112,7 +140,12 @@ class LocalFeedLoader {
                 completion(error)
                 return
             }
-            self.store.insertItems(items, timestamp: self.currentDate())
+            self.store.insertItems(items, timestamp: self.currentDate()) { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+            }
         }
     }
 }
