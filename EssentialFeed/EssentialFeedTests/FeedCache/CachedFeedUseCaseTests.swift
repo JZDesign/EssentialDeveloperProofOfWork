@@ -65,6 +65,26 @@ final class CachedFeedUseCaseTests: XCTestCase {
             store.completeInsertionSuccessfully()
         }
     }
+    
+    func test_save_doesNotDeliverInsertionErrorAfterSUTHasBeenDeallocated() {
+        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
+        var result = [Error?]()
+        sut?.save([]) { result.append($0) }
+        store.completeDeletionSuccessfully()
+        sut = nil
+        store.completeInsertion(with: .init())
+        XCTAssertEqual(result.count, 0)
+    }
+    
+    
+    func test_save_doesNotDeliverDeletionErrorAfterSUTHasBeenDeallocated() {
+        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
+        var result = [Error?]()
+        sut?.save([]) { result.append($0) }
+        sut = nil
+        store.completeDeletion(with: .init())
+        XCTAssertEqual(result.count, 0)
+    }
 
     // MARK: Helpers
     
@@ -107,21 +127,28 @@ public protocol FeedStore {
 public class LocalFeedLoader {
     let store: FeedStore
     let currentDate: () -> Date
+    public typealias SaveResult = (Error?) -> Void
     
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
 
-    public func save(_ items: [FeedItem], completion: @escaping (Error?) -> Void = { _ in }) {
+    public func save(_ items: [FeedItem], completion: @escaping SaveResult = { _ in }) {
         store.deleteCachedFeed { [weak self] error in
-            guard error == nil, let self else {
+            guard let self else { return }
+            if let error {
                 completion(error)
-                return
+            } else {
+                self.cache(items, with: completion)
             }
-            self.store.insertItems(items, timestamp: self.currentDate()) { error in
-                completion(error)
-            }
+        }
+    }
+    
+    private func cache(_ items: [FeedItem], with completion: @escaping SaveResult) {
+        store.insertItems(items, timestamp: currentDate()) { [weak self] error in
+            guard self != nil else { return }
+            completion(error)
         }
     }
 }
