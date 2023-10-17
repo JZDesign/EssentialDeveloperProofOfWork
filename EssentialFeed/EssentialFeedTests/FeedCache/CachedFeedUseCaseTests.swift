@@ -11,13 +11,13 @@ import EssentialFeed
 final class CachedFeedUseCaseTests: XCTestCase {
     func test_init_doesNotDeleteCacheUponCreation() {
         let (_, store) = makeSUT()
-        XCTAssertEqual(store.deleteCacheCallCount, 0)
+        XCTAssertEqual(store.recievedMessages, [])
     }
 
     func test_save_deletesCache() {
         let (sut, store) = makeSUT()
         sut.save([uniqueItem()])
-        XCTAssertEqual(store.deleteCacheCallCount, 1)
+        XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed])
     }
     
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
@@ -26,7 +26,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         sut.save(items)
         store.completeDeletion(with: anyNSError())
                 
-        XCTAssertEqual(store.insertCacheCallCount, 0)
+        XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed])
     }
         
     func test_save_requestCacheInsertionWithTimestampOnSuccessfulDeletion() {
@@ -36,9 +36,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         sut.save(items)
         store.completeDeletionSuccessfully()
                 
-        XCTAssertEqual(store.insertCacheCallCount, 1)
-        XCTAssertEqual(store.insertions.first!.items, items)
-        XCTAssertEqual(store.insertions.first!.timestamp, timestamp)
+        XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed, .insert(items, timestamp)])
     }
     
     // MARK: Helpers
@@ -51,24 +49,19 @@ final class CachedFeedUseCaseTests: XCTestCase {
 }
 
 
-typealias DeletionCompletion = (Error?) -> Void
 class FeedStore {
+    typealias DeletionCompletion = (Error?) -> Void
     var deletionCompletions = [DeletionCompletion]()
-    var deleteCacheCallCount: Int {
-        deletionCompletions.count
-    }
     
-    var insertions = [(items: [FeedItem], timestamp: Date)]()
-    var insertCacheCallCount: Int {
-        insertions.count
-    }
+    private(set) var recievedMessages = [ReceivedMessage]()
     
     func deleteCachedFeed(completion: @escaping DeletionCompletion) {
         deletionCompletions.append(completion)
+        recievedMessages.append(.deleteCachedFeed)
     }
     
     func insertItems(_ items: [FeedItem], timestamp: Date) {
-        insertions.append((items, timestamp))
+        recievedMessages.append(.insert(items, timestamp))
     }
     
     func completeDeletion(with error: Error, at index: Int = 0) {
@@ -77,6 +70,11 @@ class FeedStore {
     
     func completeDeletionSuccessfully(at index: Int = 0) {
         deletionCompletions[index](nil)
+    }
+    
+    enum ReceivedMessage: Equatable {
+        case deleteCachedFeed
+        case insert([FeedItem], Date)
     }
     
 }
