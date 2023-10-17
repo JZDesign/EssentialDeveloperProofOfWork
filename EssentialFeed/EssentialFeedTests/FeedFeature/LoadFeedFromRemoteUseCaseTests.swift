@@ -118,7 +118,6 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         line: UInt = #line,
         when action: () -> Void
     ) {
-        var results = [LoadFeedResult]()
         let expectation = expectation(description: "Wait for load completion")
         sut.load { result in
             switch (result, expectedResult) {

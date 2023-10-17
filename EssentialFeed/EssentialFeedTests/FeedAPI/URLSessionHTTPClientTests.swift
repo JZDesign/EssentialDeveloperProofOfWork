@@ -38,8 +38,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_failsOnRequestError() {
-        let sut = makeSUT()
-        let url = anyURL()
         let error = anyNSError()
         
         let receivedError = resultErrorFor(data: nil, response: nil, error: error) as? NSError
