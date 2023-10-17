@@ -24,7 +24,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         let items = [uniqueItem(), uniqueItem(), uniqueItem()]
         let (sut, store) = makeSUT()
         sut.save(items)
-        store.completeDeletion(with: anyNSError())
+        store.completeDeletion(with: .init())
                 
         XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed])
     }
@@ -42,57 +42,28 @@ final class CachedFeedUseCaseTests: XCTestCase {
     func test_save_failsOnDeletionError() {
         let expectedError = EquatableError()
         let (sut, store) = makeSUT()
-        var recievedError: Error?
-        
-        let expectation = expectation(description: #function)
-        
-        sut.save([]) {
-            recievedError = $0
-            expectation.fulfill()
-        }
-        
-        store.completeDeletion(with: expectedError)
 
-        wait(for: [expectation])
-        
-        XCTAssertEqual(expectedError, recievedError as! EquatableError)
+        expect(sut, toCompleteWithError: expectedError) {
+            store.completeDeletion(with: expectedError)
+        }
     }
     
     func test_save_failsOnInsertionError() {
         let expectedError = EquatableError()
         let (sut, store) = makeSUT()
-        var recievedError: Error?
-        
-        let expectation = expectation(description: #function)
-        
-        sut.save([]) {
-            recievedError = $0
-            expectation.fulfill()
+
+        expect(sut, toCompleteWithError: expectedError) {
+            store.completeDeletionSuccessfully()
+            store.completeInsertion(with: expectedError)
         }
-        
-        store.completeDeletionSuccessfully()
-        store.completeInsertion(with: expectedError)
-        wait(for: [expectation])
-        
-        XCTAssertEqual(expectedError, recievedError as! EquatableError)
     }
     
     func test_save_succeedsOnSuccessfulInsertion() {
         let (sut, store) = makeSUT()
-        var recievedError: Error?
-        
-        let expectation = expectation(description: #function)
-        
-        sut.save([]) {
-            recievedError = $0
-            expectation.fulfill()
+        expectSuccess(sut) {
+            store.completeDeletionSuccessfully()
+            store.completeInsertionSuccessfully()
         }
-        
-        store.completeDeletionSuccessfully()
-        store.completeInsertionSuccessfully()
-        wait(for: [expectation])
-        
-        XCTAssertNil(recievedError)
     }
 
     // MARK: Helpers
@@ -101,6 +72,26 @@ final class CachedFeedUseCaseTests: XCTestCase {
         let store = createAndTrackMemoryLeaks(FeedStore(), file: file, line: line)
         let loader = createAndTrackMemoryLeaks(LocalFeedLoader(store:  store, currentDate: currentDate), file: file, line: line)
         return (loader, store)
+    }
+    
+    func expectSuccess(_ sut: LocalFeedLoader, file: StaticString = #file, line: UInt = #line, when action: () -> Void) {
+        expect(sut, toCompleteWithError: nil, file: file, line: line, when: action)
+    }
+    
+    func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: EquatableError?, file: StaticString = #file, line: UInt = #line, when action: () -> Void) {
+        var recievedError: Error?
+        
+        let expectation = expectation(description: #function)
+        
+        sut.save([]) {
+            recievedError = $0
+            expectation.fulfill()
+        }
+        
+        action()
+        wait(for: [expectation])
+        
+        XCTAssertEqual(expectedError, recievedError as? EquatableError, file: file, line: line)
     }
 }
 
@@ -124,11 +115,11 @@ class FeedStore {
         recievedMessages.append(.insert(items, timestamp))
     }
     
-    func completeDeletion(with error: Error, at index: Int = 0) {
+    func completeDeletion(with error: EquatableError, at index: Int = 0) {
         deletionCompletions[index](error)
     }
     
-    func completeInsertion(with error: Error, at index: Int = 0) {
+    func completeInsertion(with error: EquatableError, at index: Int = 0) {
         insertionCompletions[index](error)
     }
     
