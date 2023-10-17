@@ -58,7 +58,6 @@ final class CachedFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(expectedError, recievedError as! EquatableError)
     }
     
-    
     func test_save_failsOnInsertionError() {
         let expectedError = EquatableError()
         let (sut, store) = makeSUT()
@@ -77,6 +76,25 @@ final class CachedFeedUseCaseTests: XCTestCase {
         
         XCTAssertEqual(expectedError, recievedError as! EquatableError)
     }
+    
+    func test_save_succeedsOnSuccessfulInsertion() {
+        let (sut, store) = makeSUT()
+        var recievedError: Error?
+        
+        let expectation = expectation(description: #function)
+        
+        sut.save([]) {
+            recievedError = $0
+            expectation.fulfill()
+        }
+        
+        store.completeDeletionSuccessfully()
+        store.completeInsertionSuccessfully()
+        wait(for: [expectation])
+        
+        XCTAssertNil(recievedError)
+    }
+
     // MARK: Helpers
     
     func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
@@ -118,6 +136,10 @@ class FeedStore {
         deletionCompletions[index](nil)
     }
     
+    func completeInsertionSuccessfully(at index: Int = 0) {
+        insertionCompletions[index](nil)
+    }
+    
     enum ReceivedMessage: Equatable {
         case deleteCachedFeed
         case insert([FeedItem], Date)
@@ -141,10 +163,7 @@ class LocalFeedLoader {
                 return
             }
             self.store.insertItems(items, timestamp: self.currentDate()) { error in
-                guard error == nil else {
-                    completion(error)
-                    return
-                }
+                completion(error)
             }
         }
     }
