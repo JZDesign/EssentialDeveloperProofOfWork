@@ -94,7 +94,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeImage(id: UUID = .init(), description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String : Encodable]) {
-        let item = FeedImage(id: id, description: description, location: location, imageURL: imageURL)
+        let item = FeedImage(id: id, description: description, location: location, url: imageURL)
         return (item, jsonItem(for: item))
     }
     
@@ -107,7 +107,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
             "id": item.id.uuidString,
             "description": item.description,
             "location": item.location,
-            "image": item.imageURL.absoluteString
+            "image": item.url.absoluteString
         ]
     }
     

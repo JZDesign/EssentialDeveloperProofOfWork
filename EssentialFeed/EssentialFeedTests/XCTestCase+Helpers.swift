@@ -28,7 +28,7 @@ extension XCTestCase {
 }
 
 func uniqueImage() -> FeedImage {
-    FeedImage(id: UUID(), description: "any", location: "any", imageURL: anyURL())
+    FeedImage(id: UUID(), description: "any", location: "any", url: anyURL())
 }
 
 

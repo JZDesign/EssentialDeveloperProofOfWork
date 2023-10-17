@@ -38,6 +38,6 @@ public class LocalFeedLoader {
 
 public extension FeedImage {
     var asLocal: LocalFeedImage {
-        .init(id: id, description: description, location: location, imageURL: imageURL)
+        .init(id: id, description: description, location: location, imageURL: url)
     }
 }

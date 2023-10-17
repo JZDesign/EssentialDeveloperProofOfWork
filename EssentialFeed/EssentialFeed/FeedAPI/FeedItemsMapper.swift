@@ -34,6 +34,6 @@ struct RemoteFeedItem: Decodable {
 
 private extension RemoteFeedItem {
     var asFeedImage: FeedImage {
-        .init(id: id, description: description, location: location, imageURL: image)
+        .init(id: id, description: description, location: location, url: image)
     }
 }
