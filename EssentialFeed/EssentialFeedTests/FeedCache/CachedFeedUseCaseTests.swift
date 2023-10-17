@@ -39,6 +39,24 @@ final class CachedFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed, .insert(items, timestamp)])
     }
     
+    func test_save_failsOnDeletionError() {
+        let expectedError = EquatableError()
+        let (sut, store) = makeSUT()
+        var recievedError: Error?
+        
+        let expectation = expectation(description: #function)
+        
+        sut.save([]) {
+            recievedError = $0
+            expectation.fulfill()
+        }
+        
+        store.completeDeletion(with: expectedError)
+        wait(for: [expectation])
+        
+        XCTAssertEqual(expectedError, recievedError as! EquatableError)
+    }
+    
     // MARK: Helpers
     
     func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
@@ -88,9 +106,10 @@ class LocalFeedLoader {
         self.currentDate = currentDate
     }
 
-    func save(_ items: [FeedItem]) {
+    func save(_ items: [FeedItem], completion: @escaping (Error?) -> Void = { _ in }) {
         store.deleteCachedFeed { [weak self] error in
             guard error == nil, let self else {
+                completion(error)
                 return
             }
             self.store.insertItems(items, timestamp: self.currentDate())

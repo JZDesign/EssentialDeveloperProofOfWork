@@ -51,3 +51,10 @@ func nonHttpResponse() -> URLResponse {
     URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
 }
 
+struct EquatableError: Error, Equatable {
+    let id: UUID
+    
+    init(id: UUID = .init()) {
+        self.id = id
+    }
+}
