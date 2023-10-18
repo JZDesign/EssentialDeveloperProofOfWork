@@ -36,6 +36,19 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         })
     }
     
+    func test_load_deliversCachedImagesWhenFeedIsLessThanSevenDaysOld() {
+        let fixedCurrentDate = Date.now
+        let lessThanSevenDays = Date.now
+            .adding(days: -7)
+            .adding(seconds: 1)
+        
+        let feed = uniqueImages()
+        let (sut, store) = makeSUT { fixedCurrentDate }
+        expect(sut, toCompleteWith: .success(feed.model), when: {
+            store.completeRetrievalSuccessfully(with: feed.local, timestamp: lessThanSevenDays)
+        })
+    }
+    
     // MARK: Helpers
     
     func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
@@ -44,7 +57,13 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         return (loader, store)
     }
     
-    func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LoadFeedResult, file: StaticString = #file, line: UInt = #line, when action: () -> Void) {
+    func expect(
+        _ sut: LocalFeedLoader,
+        toCompleteWith expectedResult: LoadFeedResult,
+        file: StaticString = #file,
+        line: UInt = #line,
+        when action: () -> Void
+    ) {
         
         let expectation = expectation(description: #function)
         
@@ -67,6 +86,15 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         
         action()
         wait(for: [expectation])
-        
+    }
+}
+
+extension Date {
+    func adding(days: Int) -> Date {
+        Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+    
+    func adding(seconds: Int) -> Date {
+        Calendar(identifier: .gregorian).date(byAdding: .second, value: seconds, to: self)!
     }
 }

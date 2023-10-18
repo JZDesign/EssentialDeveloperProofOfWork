@@ -18,7 +18,16 @@ public class LocalFeedLoader {
     }
 
     public func load(completion: @escaping (LoadFeedResult) -> Void) {
-        store.retieve(completion: completion)
+        store.retieve {
+            switch $0 {
+            case .empty:
+                completion(.success([]))
+            case let .found(images, timestamp):
+                completion(.success(images.map(\.asModel)))
+            case let .failure(error):
+                completion(.failure(error))
+            }
+        }
     }
     
     public func save(_ images: [FeedImage], completion: @escaping SaveResult = { _ in }) {
@@ -43,5 +52,11 @@ public class LocalFeedLoader {
 public extension FeedImage {
     var asLocal: LocalFeedImage {
         .init(id: id, description: description, location: location, imageURL: url)
+    }
+}
+
+public extension LocalFeedImage {
+    var asModel: FeedImage {
+        .init(id: id, description: description, location: location, url: imageURL)
     }
 }
