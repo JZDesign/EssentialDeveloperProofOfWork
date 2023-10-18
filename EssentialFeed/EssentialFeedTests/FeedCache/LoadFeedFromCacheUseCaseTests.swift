@@ -74,6 +74,15 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         })
     }
     
+    func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
+        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
+        sut?.load { _ in
+            XCTFail(#function)
+        }
+        sut = nil
+        store.completeRetrievalSuccessfully(with: [])
+    }
+    
     func test_load_deletesCacheOnRetievalError() {
         let (sut, store) = makeSUT()
         sut.load { _ in }
