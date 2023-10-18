@@ -32,7 +32,7 @@ func uniqueImage() -> FeedImage {
 }
 
 
-func uniqueImages() -> (remote: [FeedImage], local: [LocalFeedImage]) {
+func uniqueImages() -> (model: [FeedImage], local: [LocalFeedImage]) {
     let remote = [
         uniqueImage(),
         uniqueImage(),

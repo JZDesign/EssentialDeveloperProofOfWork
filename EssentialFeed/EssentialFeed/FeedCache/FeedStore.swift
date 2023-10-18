@@ -10,9 +10,8 @@ import Foundation
 public protocol FeedStore {
     typealias DeletionCompletion = (Error?) -> Void
     typealias InsertionCompletion = (Error?) -> Void
-    typealias LoadCacheResult = Result<[LocalFeedImage], Error>
     
-    func retieve(completion: @escaping (LoadCacheResult) -> Void)
+    func retieve(completion: @escaping (LoadFeedResult) -> Void)
     func deleteCachedFeed(completion: @escaping DeletionCompletion)
     func insertImages(_ images: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion)
 }

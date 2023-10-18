@@ -17,7 +17,7 @@ public class LocalFeedLoader {
         self.currentDate = currentDate
     }
 
-    public func load(completion: @escaping (Result<[LocalFeedImage], Error>) -> Void) {
+    public func load(completion: @escaping (LoadFeedResult) -> Void) {
         store.retieve(completion: completion)
     }
     
