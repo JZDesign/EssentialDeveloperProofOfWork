@@ -16,16 +16,17 @@ public class LocalFeedLoader {
         self.store = store
         self.currentDate = currentDate
     }
-
+    
     public func load(completion: @escaping (LoadFeedResult) -> Void) {
-        store.retieve {
+        store.retieve { [weak self] in
+            guard let self else { return }
             switch $0 {
-            case .empty:
-                completion(.success([]))
-            case let .found(images, timestamp):
+            case let .found(images, timestamp) where self.validate(timestamp):
                 completion(.success(images.map(\.asModel)))
             case let .failure(error):
                 completion(.failure(error))
+            case .empty, .found:
+                completion(.success([]))
             }
         }
     }
@@ -45,6 +46,14 @@ public class LocalFeedLoader {
         store.insertImages(images.map(\.asLocal), timestamp: currentDate()) { [weak self] error in
             guard self != nil else { return }
             completion(error)
+        }
+    }
+    
+    private func validate(_ date: Date) -> Bool {
+        if let maxAge = date.adding(days: 7) {
+            return currentDate() < maxAge
+        } else {
+            return false
         }
     }
 }
