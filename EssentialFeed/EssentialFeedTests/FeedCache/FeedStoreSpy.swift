@@ -11,7 +11,7 @@ import EssentialFeed
 class FeedStoreSpy: FeedStore {
     var deletionCompletions = [FeedStore.DeletionCompletion]()
     var insertionCompletions = [FeedStore.InsertionCompletion]()
-    
+    var retrievalCompletions = [(FeedStore.LoadCacheResult) -> Void]()
     private(set) var recievedMessages = [ReceivedMessage]()
     
     func deleteCachedFeed(completion: @escaping DeletionCompletion) {
@@ -24,8 +24,13 @@ class FeedStoreSpy: FeedStore {
         recievedMessages.append(.insert(images, timestamp))
     }
     
-    func retieve(completion: (LoadCacheResult) -> Void) {
+    func retieve(completion: @escaping (LoadCacheResult) -> Void) {
+        retrievalCompletions.append(completion)
         recievedMessages.append(.retrieve)
+    }
+    
+    func completeRetrieval(with error: EquatableError, at index: Int = 0) {
+        retrievalCompletions[index](.failure(error))
     }
     
     func completeDeletion(with error: EquatableError, at index: Int = 0) {

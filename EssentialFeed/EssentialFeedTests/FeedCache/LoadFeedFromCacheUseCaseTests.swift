@@ -21,15 +21,24 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.recievedMessages, [.retrieve])
     }
     
-//
-//    func test_load_deletesCacheOnRetrievalError() {
-//        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
-//        var result = [Error?]()
-//        sut?.load() { _ in }
-//        sut = nil
-//        store.completeRetrieval(with: .init())
-//        XCTAssertEqual(result.count, 0)
-//    }
+
+    func test_load_failsOnRetrievalError() {
+        var (sut, store) = makeSUT()
+        let expectedError = EquatableError()
+        var capturedError: EquatableError?
+
+        sut.load() {
+            switch $0 {
+            case .failure(let error):
+                capturedError = error as? EquatableError
+            default:
+                XCTFail(#function)
+            }
+        }
+        store.completeRetrieval(with: expectedError)
+
+        XCTAssertEqual(capturedError, expectedError)
+    }
     
     // MARK: Helpers
     
