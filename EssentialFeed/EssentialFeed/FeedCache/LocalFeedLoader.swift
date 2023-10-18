@@ -24,6 +24,7 @@ public class LocalFeedLoader {
             case let .found(images, timestamp) where self.validate(timestamp):
                 completion(.success(images.map(\.asModel)))
             case let .failure(error):
+                store.deleteCachedFeed { _ in }
                 completion(.failure(error))
             case .empty, .found:
                 completion(.success([]))
