@@ -17,6 +17,10 @@ public class LocalFeedLoader {
         self.currentDate = currentDate
     }
 
+    public func load(completion: @escaping (Result<[LocalFeedImage], Error>) -> Void) {
+        store.retieve(completion: completion)
+    }
+    
     public func save(_ images: [FeedImage], completion: @escaping SaveResult = { _ in }) {
         store.deleteCachedFeed { [weak self] error in
             guard let self else { return }
