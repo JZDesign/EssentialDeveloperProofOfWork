@@ -25,28 +25,15 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let expectedError = EquatableError()
 
-        sut.load() {
-            switch $0 {
-            case .failure(let error):
-                XCTAssertEqual(error as? EquatableError, expectedError)
-            default:
-                XCTFail(#function)
-            }
-        }
-        store.completeRetrieval(with: expectedError)
+        expect(sut, toCompleteWith: .failure(expectedError), when: {
+            store.completeRetrieval(with: expectedError)
+        })
     }
 
     func test_load_deliversNoImagesOnEmptyCache() {
         let (sut, store) = makeSUT()
-        sut.load() {
-            switch $0 {
-            case .failure:
-                XCTFail(#function)
-            case .success(let images):
-                XCTAssertEqual(images, [])
-            }
-        }
-        store.completeRetrievalSuccessfully(with: [])
+        expect(sut, toCompleteWith: .success([]), when: {            store.completeRetrievalWithEmptyCache()
+        })
     }
     
     // MARK: Helpers
@@ -57,17 +44,23 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         return (loader, store)
     }
     
-    func expect(_ sut: LocalFeedLoader, toCompleteLoadWithError expectedError: EquatableError?, file: StaticString = #file, line: UInt = #line, when action: () -> Void) {
-        var recievedError: Error?
+    func expect(_ sut: LocalFeedLoader, toCompleteWith expectedResult: LoadFeedResult, file: StaticString = #file, line: UInt = #line, when action: () -> Void) {
         
         let expectation = expectation(description: #function)
         
-        sut.load {
-            switch $0 {
-            case .success:
-                XCTFail(#function)
-            case .failure(let error):
-                recievedError = error
+        sut.load { recievedResult in
+            switch (recievedResult, expectedResult) {
+            case let (.success(values), .success(expectedValues)):
+                XCTAssertEqual(values, expectedValues, file: file, line: line)
+            case let (.failure(error), .failure(expectedError)):
+                XCTAssertEqual(
+                    (error as? EquatableError)!,
+                    (expectedError as? EquatableError)!,
+                    file: file,
+                    line: line
+                )
+            default:
+                XCTFail("Expected \(expectedResult) got \(recievedResult) instead")
             }
             expectation.fulfill()
         }
@@ -75,6 +68,5 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         action()
         wait(for: [expectation])
         
-        XCTAssertEqual(expectedError, recievedError as? EquatableError, file: file, line: line)
     }
 }
