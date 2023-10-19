@@ -9,56 +9,6 @@ import EssentialFeed
 import Foundation
 import XCTest
 
-extension FailableDeleteFeedStoreSpecs where Self: XCTestCase {
-    
-    func assertThatDeleteDeliversErrorOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-
-        XCTAssertNotNil(deleteCache(from: sut), "Expected cache deletion to fail")
-        expect(sut, toRetrieve: .empty, file: file, line: line)
-    }
-    
-    func assertThatDeleteHasNoSideEffectsOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-        
-        deleteCache(from: sut)
-        
-        expect(sut, toRetrieve: .empty, file: file, line: line)
-    }
-    
-}
-
-extension FailableInsertFeedStoreSpecs where Self: XCTestCase {
-    
-    func assertThatInsertDeliversErrorOnInsertionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-        let feed = uniqueImages().local
-        let timestamp = Date()
-
-        let insertionError = insert((feed, timestamp), to: sut)
-
-        XCTAssertNotNil(insertionError, "Expected cache insertion to fail with an error")
-        expect(sut, toRetrieve: .empty, file: file, line: line)
-    }
-    
-    func assertThatInsertHasNoSideEffectsOnInsertionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-        let feed = uniqueImages().local
-        let timestamp = Date()
-        
-        insert((feed, timestamp), to: sut)
-        
-        expect(sut, toRetrieve: .empty, file: file, line: line)
-    }
-    
-}
-
-extension FailableRetrieveFeedStoreSpecs where Self: XCTestCase {
-    func assertThatRetrieveDeliversFailureOnRetrievalError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-            expect(sut, toRetrieve: .failure(EquatableError()), file: file, line: line)
-        }
-
-        func assertThatRetrieveHasNoSideEffectsOnFailure(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-            expect(sut, toRetrieveTwice: .failure(EquatableError()), file: file, line: line)
-        }
-}
-
 extension FeedStoreSpecs where Self: XCTestCase {
     
     func assertThatRetrieveDeliversEmptyOnEmptyCache(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
