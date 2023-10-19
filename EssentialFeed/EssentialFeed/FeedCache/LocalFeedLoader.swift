@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LocalFeedLoader {
+public class LocalFeedLoader: FeedLoader {
     let store: FeedStore
     let currentDate: () -> Date
     public typealias SaveResult = (Error?) -> Void
