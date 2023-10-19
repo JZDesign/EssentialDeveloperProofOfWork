@@ -11,6 +11,7 @@ public class LocalFeedLoader: FeedLoader {
     let store: FeedStore
     let currentDate: () -> Date
     public typealias SaveResult = (Error?) -> Void
+    lazy var cachePolicy = FeedCachePolicy(currentDate: currentDate)
     
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -21,7 +22,7 @@ public class LocalFeedLoader: FeedLoader {
         store.retieve { [weak self] in
             guard let self else { return }
             switch $0 {
-            case let .found(images, timestamp) where self.validate(timestamp):
+            case let .found(images, timestamp) where self.cachePolicy.validate(timestamp):
                 completion(.success(images.map(\.asModel)))
             case let .failure(error):
                 completion(.failure(error))
@@ -48,7 +49,7 @@ public class LocalFeedLoader: FeedLoader {
             switch $0 {
             case .failure:
                 self.store.deleteCachedFeed { _ in }
-            case let .found(_, timestamp) where !self.validate(timestamp):
+            case let .found(_, timestamp) where !self.cachePolicy.validate(timestamp):
                 self.store.deleteCachedFeed { _ in }
             default: break
             }
@@ -62,13 +63,6 @@ public class LocalFeedLoader: FeedLoader {
         }
     }
     
-    private func validate(_ date: Date) -> Bool {
-        if let maxAge = date.adding(days: 7) {
-            return currentDate() < maxAge
-        } else {
-            return false
-        }
-    }
 }
 
 public extension FeedImage {
@@ -80,5 +74,21 @@ public extension FeedImage {
 public extension LocalFeedImage {
     var asModel: FeedImage {
         .init(id: id, description: description, location: location, url: imageURL)
+    }
+}
+
+public final class FeedCachePolicy {
+    let currentDate: () -> Date
+    
+    init(currentDate: @escaping () -> Date) {
+        self.currentDate = currentDate
+    }
+    
+    func validate(_ date: Date) -> Bool {
+        if let maxAge = date.adding(days: 7) {
+            return currentDate() < maxAge
+        } else {
+            return false
+        }
     }
 }
