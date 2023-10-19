@@ -105,19 +105,19 @@ class CodableFeedStoreTests: XCTestCase {
     func test_retrieve_deliversFailureOnRetrievalError() {
         let sut = makeSUT()
         
-        try! "invalid data".write(to: storeURL(), atomically: false, encoding: .utf8)
+        try! "invalid data".write(to: testSpecificStoreURL(), atomically: false, encoding: .utf8)
         
         expect(sut, toRetrieve: .failure(EquatableError()))
     }
     
     // Helpers
     
-    private func storeURL() -> URL {
+    private func testSpecificStoreURL() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
     }
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableFeedStore {
-        return createAndTrackMemoryLeaks(CodableFeedStore(storeURL: storeURL()), file: file, line: line)
+        return createAndTrackMemoryLeaks(CodableFeedStore(storeURL: testSpecificStoreURL()), file: file, line: line)
     }
     
     private func setupEmptyStoreState() {
@@ -129,7 +129,7 @@ class CodableFeedStoreTests: XCTestCase {
     }
     
     private func deleteStoreArtifacts() {
-        try? FileManager.default.removeItem(at: storeURL())
+        try? FileManager.default.removeItem(at: testSpecificStoreURL())
     }
     
     private func expect(
