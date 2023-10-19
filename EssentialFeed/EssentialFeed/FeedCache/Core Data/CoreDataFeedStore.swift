@@ -69,6 +69,8 @@ public final class CoreDataFeedStore: FeedStore {
     }
 }
 
+// MARK: - Core Data
+
 private extension NSPersistentContainer {
     enum LoadingError: Swift.Error {
         case modelNotFound
