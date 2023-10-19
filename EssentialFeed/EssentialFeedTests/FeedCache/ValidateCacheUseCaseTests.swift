@@ -12,21 +12,21 @@ final class ValidateCacheUseCaseTests: XCTestCase {
     
     func test_init_doesNotMessageStore() {
         let (_, store) = makeSUT()
-        XCTAssertEqual(store.recievedMessages, [])
+        XCTAssertEqual(store.receivedMessages, [])
     }
     
     func test_validateCache_deletesCacheOnRetievalError() {
         let (sut, store) = makeSUT()
         sut.validateCache()
         store.completeRetrieval(with: .init())
-        XCTAssertEqual(store.recievedMessages, [.retrieve, .deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
     }
     
     func test_validateCache_hasNoSideEffectsOnEmptyCache() {
         let (sut, store) = makeSUT()
         sut.validateCache()
         store.completeRetrievalWithEmptyCache()
-        XCTAssertEqual(store.recievedMessages, [.retrieve])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     // MARK: Helpers

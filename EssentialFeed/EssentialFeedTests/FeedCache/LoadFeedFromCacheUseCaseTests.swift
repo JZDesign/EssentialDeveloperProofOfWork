@@ -12,13 +12,13 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
     
     func test_init_doesNotMessageStore() {
         let (_, store) = makeSUT()
-        XCTAssertEqual(store.recievedMessages, [])
+        XCTAssertEqual(store.receivedMessages, [])
     }
     
     func test_load_requestsCacheRetrieval() {
         let (sut, store) = makeSUT()
         sut.load { _ in }
-        XCTAssertEqual(store.recievedMessages, [.retrieve])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     func test_load_failsOnRetrievalError() {
@@ -87,14 +87,14 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         sut.load { _ in }
         store.completeRetrieval(with: .init())
-        XCTAssertEqual(store.recievedMessages, [.retrieve])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     func test_load_hasNoSideEffectsOnEmptyCache() {
         let (sut, store) = makeSUT()
         sut.load { _ in }
         store.completeRetrievalWithEmptyCache()
-        XCTAssertEqual(store.recievedMessages, [.retrieve])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     // MARK: Helpers

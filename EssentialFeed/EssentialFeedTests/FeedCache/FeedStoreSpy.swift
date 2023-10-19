@@ -12,21 +12,21 @@ class FeedStoreSpy: FeedStore {
     var deletionCompletions = [FeedStore.DeletionCompletion]()
     var insertionCompletions = [FeedStore.InsertionCompletion]()
     var retrievalCompletions = [FeedStore.RetrieveCompletion]()
-    private(set) var recievedMessages = [ReceivedMessage]()
+    private(set) var receivedMessages = [ReceivedMessage]()
     
     func deleteCachedFeed(completion: @escaping DeletionCompletion) {
         deletionCompletions.append(completion)
-        recievedMessages.append(.deleteCachedFeed)
+        receivedMessages.append(.deleteCachedFeed)
     }
     
     func insertImages(_ images: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         insertionCompletions.append(completion)
-        recievedMessages.append(.insert(images, timestamp))
+        receivedMessages.append(.insert(images, timestamp))
     }
     
     func retieve(completion: @escaping RetrieveCompletion) {
         retrievalCompletions.append(completion)
-        recievedMessages.append(.retrieve)
+        receivedMessages.append(.retrieve)
     }
     
     func completeRetrievalWithEmptyCache(at index: Int = 0) {

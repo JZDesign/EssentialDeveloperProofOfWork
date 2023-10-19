@@ -11,13 +11,13 @@ import EssentialFeed
 final class CachedFeedUseCaseTests: XCTestCase {
     func test_init_doesNotDeleteCacheUponCreation() {
         let (_, store) = makeSUT()
-        XCTAssertEqual(store.recievedMessages, [])
+        XCTAssertEqual(store.receivedMessages, [])
     }
 
     func test_save_deletesCache() {
         let (sut, store) = makeSUT()
         sut.save(uniqueImages().model)
-        XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
     
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
@@ -25,7 +25,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         sut.save(uniqueImages().model)
         store.completeDeletion(with: .init())
                 
-        XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
         
     func test_save_requestCacheInsertionWithTimestampOnSuccessfulDeletion() {
@@ -35,7 +35,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         sut.save(images.model)
         store.completeDeletionSuccessfully()
                 
-        XCTAssertEqual(store.recievedMessages, [.deleteCachedFeed, .insert(images.local, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(images.local, timestamp)])
     }
     
     func test_save_failsOnDeletionError() {
