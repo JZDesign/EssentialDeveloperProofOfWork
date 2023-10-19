@@ -142,7 +142,7 @@ class CodableFeedStoreTests: XCTestCase {
         XCTAssertEqual(completedOperationsInOrder, [operation, operation2, operation3], "Expected to run serially but finished in the wrong order")
     }
     
-    // Helpers
+    // MARK: - Helpers
     
     private func cachesDirectory() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -167,6 +167,8 @@ class CodableFeedStoreTests: XCTestCase {
     private func deleteStoreArtifacts() {
         try? FileManager.default.removeItem(at: testSpecificStoreURL())
     }
+    
+    // MARK: Expectations
     
     private func expect(
         _ sut: FeedStore,
@@ -204,7 +206,7 @@ class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: expectedResult, file: file, line: line)
         expect(sut, toRetrieve: expectedResult, file: file, line: line)
     }
-
+    
     @discardableResult
     private func insert(
         _ cache: (feed: [LocalFeedImage], timestamp: Date), 
