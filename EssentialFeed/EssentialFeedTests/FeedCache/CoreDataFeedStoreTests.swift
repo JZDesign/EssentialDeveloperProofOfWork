@@ -22,11 +22,17 @@ class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: makeSUT())
     }
 
-    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() { }
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() { 
+        assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: makeSUT())
+    }
 
-    func test_insert_deliversNoErrorOnEmptyCache() { }
+    func test_insert_deliversNoErrorOnEmptyCache() {
+        assertThatInsertDeliversNoErrorOnEmptyCache(on: makeSUT())
+    }
 
-    func test_insert_deliversNoErrorOnNonEmptyCache() { }
+    func test_insert_deliversNoErrorOnNonEmptyCache() { 
+        assertThatInsertDeliversNoErrorOnNonEmptyCache(on: makeSUT())
+    }
 
     func test_insert_overridesPreviouslyInsertedCacheValues() { }
 
