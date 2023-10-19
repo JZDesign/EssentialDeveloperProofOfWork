@@ -62,14 +62,12 @@ class CodableFeedStore {
 class CodableFeedStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        
-        try? FileManager.default.removeItem(at: storeURL())
+        setupEmptyStoreState()
     }
     
     override func tearDown() {
         super.tearDown()
-        
-        try? FileManager.default.removeItem(at: storeURL())
+        undoStoreSideEffects()
     }
     
     func test_retrieve_deliversEmptyOnEmptyCache() {
@@ -145,5 +143,17 @@ class CodableFeedStoreTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableFeedStore {
         return createAndTrackMemoryLeaks(CodableFeedStore(storeURL: storeURL()), file: file, line: line)
+    }
+    
+    private func setupEmptyStoreState() {
+        deleteStoreArtifacts()
+    }
+    
+    private func undoStoreSideEffects() {
+        deleteStoreArtifacts()
+    }
+    
+    private func deleteStoreArtifacts() {
+        try? FileManager.default.removeItem(at: storeURL())
     }
 }
