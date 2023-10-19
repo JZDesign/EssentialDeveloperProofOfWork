@@ -71,3 +71,9 @@ struct EquatableError: Error, Equatable {
         self.id = id
     }
 }
+
+extension Date {
+    func minusFeedCacheMaxAge() -> Date {
+        adding(days: -7)!
+    }
+}

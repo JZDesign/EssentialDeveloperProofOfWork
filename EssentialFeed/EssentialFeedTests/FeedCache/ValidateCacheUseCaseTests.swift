@@ -33,7 +33,7 @@ final class ValidateCacheUseCaseTests: XCTestCase {
         let feed = uniqueImages()
         let fixedCurrentDate = Date()
         let lessThanSevenDaysOldTimestamp = fixedCurrentDate
-            .adding(days: -7)!
+            .minusFeedCacheMaxAge()
             .adding(seconds: 1)!
         
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
@@ -48,7 +48,7 @@ final class ValidateCacheUseCaseTests: XCTestCase {
         let feed = uniqueImages()
         let fixedCurrentDate = Date()
         let sevenDaysOldTimestamp = fixedCurrentDate
-            .adding(days: -7)!
+            .minusFeedCacheMaxAge()
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
 
         sut.validateCache()
@@ -61,7 +61,7 @@ final class ValidateCacheUseCaseTests: XCTestCase {
         let feed = uniqueImages()
         let fixedCurrentDate = Date()
         let moreThanSevenDaysOldTimestamp = fixedCurrentDate
-            .adding(days: -7)!
+            .minusFeedCacheMaxAge()
             .adding(seconds: -1)!
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
 
