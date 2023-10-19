@@ -49,6 +49,10 @@ class CodableFeedStore {
         }
     }
     
+    func deleteCachedFeed(completion: @escaping FeedStore.DeletionCompletion) {
+        completion(nil)
+    }
+    
     private struct CodableFeedImage: Codable {
         private let id: UUID
         private let description: String?
@@ -151,7 +155,19 @@ class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
 
-
+    func test_delete_hasNoSideEffectsOnEmptyCache() {
+        let sut = makeSUT()
+        let exp = expectation(description: #function)
+        
+        sut.deleteCachedFeed { error in
+            XCTAssertNil(error)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        expect(sut, toRetrieve: .empty)
+    }
+    
     // Helpers
     
     private func testSpecificStoreURL() -> URL {
