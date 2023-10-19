@@ -54,7 +54,9 @@ class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         assertThatDeleteDeliversNoErrorOnNonEmptyCache(on: makeSUT())
     }
 
-    func test_storeSideEffects_runSerially() { }
+    func test_storeSideEffects_runSerially() { 
+        assertThatSideEffectsRunSerially(on: makeSUT())
+    }
     
     // MARK: - Helpers
     
