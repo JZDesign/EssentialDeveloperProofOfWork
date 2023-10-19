@@ -38,10 +38,15 @@ class CodableFeedStore {
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
-        let encoded = try! JSONEncoder()
-            .encode(Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp))
-        try! encoded.write(to: storeURL)
-        completion(nil)
+        do {
+            let cache = Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp)
+            let encoded = try JSONEncoder().encode(cache)
+            
+            try encoded.write(to: storeURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
     }
     
     private struct CodableFeedImage: Codable {
@@ -133,6 +138,19 @@ class CodableFeedStoreTests: XCTestCase {
         XCTAssertNil(latestInsertionError, "Expected to override cache successfully")
         expect(sut, toRetrieve: .found(images: latestFeed, timestamp: latestTimestamp))
     }
+    
+    func test_insert_deliversErrorOnInsertionError() {
+        let invalidStoreURL = URL(string: "invalid://store-url")!
+        let sut = makeSUT(storeURL: invalidStoreURL)
+        let feed = uniqueImages().local
+        let timestamp = Date()
+
+        let insertionError = insert((feed, timestamp), to: sut)
+
+        XCTAssertNotNil(insertionError, "Expected cache insertion to fail with an error")
+        expect(sut, toRetrieve: .empty)
+    }
+
 
     // Helpers
     
@@ -193,11 +211,16 @@ class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: expectedResult, file: file, line: line)
     }
 
-    private func insert(_ cache: (feed: [LocalFeedImage], timestamp: Date), to sut: CodableFeedStore) -> Error? {
+    @discardableResult
+    private func insert(
+        _ cache: (feed: [LocalFeedImage], timestamp: Date), 
+        to sut: CodableFeedStore,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Error? {
         let exp = expectation(description: "Wait for cache insertion")
         var error: Error?
         sut.insert(cache.feed, timestamp: cache.timestamp) { insertionError in
-            XCTAssertNil(insertionError, "Expected feed to be inserted successfully")
             error = insertionError
             exp.fulfill()
         }
