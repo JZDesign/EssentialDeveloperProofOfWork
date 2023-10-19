@@ -9,6 +9,23 @@ import EssentialFeed
 import Foundation
 import XCTest
 
+extension FailableDeleteFeedStoreSpecs where Self: XCTestCase {
+    
+    func assertThatDeleteDeliversErrorOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
+
+        XCTAssertNotNil(deleteCache(from: sut), "Expected cache deletion to fail")
+        expect(sut, toRetrieve: .empty, file: file, line: line)
+    }
+    
+    func assertThatDeleteHasNoSideEffectsOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
+        
+        deleteCache(from: sut)
+        
+        expect(sut, toRetrieve: .empty, file: file, line: line)
+    }
+    
+}
+
 extension FailableInsertFeedStoreSpecs where Self: XCTestCase {
     
     func assertThatInsertDeliversErrorOnInsertionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
@@ -126,20 +143,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         
         expect(sut, toRetrieve: .empty, file: file, line: line)
     }
-    
-    func assertThatDeleteDeliversErrorOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-
-        XCTAssertNotNil(deleteCache(from: sut), "Expected cache deletion to fail")
-        expect(sut, toRetrieve: .empty, file: file, line: line)
-    }
-    
-    func assertThatDeleteHasNoSideEffectsOnDeletionError(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
-        
-        deleteCache(from: sut)
-        
-        expect(sut, toRetrieve: .empty, file: file, line: line)
-    }
-    
+   
     func assertThatSideEffectsRunSerially(on sut: FeedStore, file: StaticString = #file, line: UInt = #line) {
         var completedOperationsInOrder = [XCTestExpectation]()
         
