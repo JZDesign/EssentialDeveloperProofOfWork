@@ -24,7 +24,6 @@ public class LocalFeedLoader {
             case let .found(images, timestamp) where self.validate(timestamp):
                 completion(.success(images.map(\.asModel)))
             case let .failure(error):
-                store.deleteCachedFeed { _ in }
                 completion(.failure(error))
             case .empty, .found:
                 completion(.success([]))
@@ -39,6 +38,17 @@ public class LocalFeedLoader {
                 completion(error)
             } else {
                 self.cache(images, with: completion)
+            }
+        }
+    }
+    
+    public func validateCache() {
+        store.retieve { [weak self] in
+            guard let self else { return }
+            switch $0 {
+            case .failure:
+                self.store.deleteCachedFeed { _ in }
+            default: break
             }
         }
     }
