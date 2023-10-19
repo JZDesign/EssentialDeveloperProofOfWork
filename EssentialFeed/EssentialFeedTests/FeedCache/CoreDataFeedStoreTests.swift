@@ -14,7 +14,9 @@ class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         assertThatRetrieveDeliversEmptyOnEmptyCache(on: makeSUT())
     }
 
-    func test_retrieve_hasNoSideEffectsOnEmptyCache() { }
+    func test_retrieve_hasNoSideEffectsOnEmptyCache() { 
+        assertThatRetrieveHasNoSideEffectsOnEmptyCache(on: makeSUT())
+    }
 
     func test_retrieve_deliversFoundValuesOnNonEmptyCache() { }
 
