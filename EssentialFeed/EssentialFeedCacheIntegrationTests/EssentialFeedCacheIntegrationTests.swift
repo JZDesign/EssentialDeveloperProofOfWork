@@ -25,17 +25,15 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
     
     func test_save_overridesItemsSavedOnASeparateInstance() {
         let (sutToPerformFirstSave, sutToPerformLastSave, sutToPerformLoad) = (makeSUT(), makeSUT(), makeSUT())
-
+        
         let latestFeed = uniqueImages().model
-
+        
         save(uniqueImages().model, with: sutToPerformFirstSave)
         save(latestFeed, with: sutToPerformLastSave)
         
         expect(sutToPerformLoad, toLoad: latestFeed)
     }
     
-    //    func test_() throws { }
-
     // MARK: - Test Lifecycle
     
     override func setUp() {
