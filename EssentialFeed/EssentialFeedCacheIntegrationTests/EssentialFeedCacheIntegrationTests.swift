@@ -9,7 +9,6 @@ import XCTest
 import EssentialFeed
 
 final class EssentialFeedCacheIntegrationTests: XCTestCase {
-    
     func test_load_deliversNoItemsOnEmptyCache() throws {
         let sut = makeSUT()
         let exp = expectation(description: #function)
@@ -28,8 +27,20 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
     }
     
     //    func test_() throws { }
+
+    // MARK: - Test Lifecycle
     
-    // MARK: Helpers
+    override func setUp() {
+        super.setUp()
+        setupEmptyStoreState()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        undoStoreSideEffects()
+    }
+    
+    // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let storeBundle = Bundle(for: CoreDataFeedStore.self)
@@ -45,5 +56,17 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
     
     private func cachesDirectory() -> URL {
         FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    }
+    
+    private func setupEmptyStoreState() {
+        deleteStoreArtifacts()
+    }
+    
+    private func undoStoreSideEffects() {
+        deleteStoreArtifacts()
+    }
+    
+    private func deleteStoreArtifacts() {
+        try? FileManager.default.removeItem(at: testSpecificStoreURL())
     }
 }
