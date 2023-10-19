@@ -18,7 +18,7 @@ public class LocalFeedLoader: FeedLoader {
     }
     
     public func load(completion: @escaping (LoadFeedResult) -> Void) {
-        store.retieve { [weak self] in
+        store.retrieve { [weak self] in
             guard let self else { return }
             switch $0 {
             case let .found(images, timestamp) where FeedCachePolicy.validate(timestamp, againstDate: currentDate()):
@@ -43,7 +43,7 @@ public class LocalFeedLoader: FeedLoader {
     }
     
     public func validateCache() {
-        store.retieve { [weak self] in
+        store.retrieve { [weak self] in
             guard let self else { return }
             switch $0 {
             case .failure:
@@ -56,7 +56,7 @@ public class LocalFeedLoader: FeedLoader {
     }
     
     private func cache(_ images: [FeedImage], with completion: @escaping SaveResult) {
-        store.insertImages(images.map(\.asLocal), timestamp: currentDate()) { [weak self] error in
+        store.insert(images.map(\.asLocal), timestamp: currentDate()) { [weak self] error in
             guard self != nil else { return }
             completion(error)
         }

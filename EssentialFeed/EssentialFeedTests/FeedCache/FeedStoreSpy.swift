@@ -19,12 +19,12 @@ class FeedStoreSpy: FeedStore {
         receivedMessages.append(.deleteCachedFeed)
     }
     
-    func insertImages(_ images: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
+    func insert(_ images: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         insertionCompletions.append(completion)
         receivedMessages.append(.insert(images, timestamp))
     }
     
-    func retieve(completion: @escaping RetrieveCompletion) {
+    func retrieve(completion: @escaping RetrieveCompletion) {
         retrievalCompletions.append(completion)
         receivedMessages.append(.retrieve)
     }
