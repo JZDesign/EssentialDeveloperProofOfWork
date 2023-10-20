@@ -11,7 +11,7 @@ extension URLSession: HTTPClient {
     
     private struct UnexpectedValuesRepresentation: Error {}
     
-    public func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
         dataTask(with: url) { data, response, error in
             if let error {
                 completion(.failure(error))

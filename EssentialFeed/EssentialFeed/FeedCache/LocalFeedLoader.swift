@@ -17,7 +17,7 @@ public class LocalFeedLoader: FeedLoader {
         self.currentDate = currentDate
     }
     
-    public func load(completion: @escaping (LoadFeedResult) -> Void) {
+    public func load(completion: @escaping (FeedLoader.Result) -> Void) {
         store.retrieve { [weak self] in
             guard let self else { return }
             switch $0 {

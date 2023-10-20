@@ -135,8 +135,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
         error: Error?,
         file: StaticString,
         line: UInt
-    ) -> HTTPClientResult {
-        var receivedResult: HTTPClientResult!
+    ) -> HTTPClient.Result {
+        var receivedResult: HTTPClient.Result!
 
         URLProtocolStub.stub(url: anyURL(), data: data, response: response, error: error)
         

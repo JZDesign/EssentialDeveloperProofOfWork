@@ -81,7 +81,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     func test_load_doesNotDeliverResultAfterSUTisDeallocated() {
         var (sut, client): (RemoteFeedLoader?, HTTPClientSpy) = makeSUT()
-        var capturedResults: [LoadFeedResult] = []
+        var capturedResults: [FeedLoader.Result] = []
         
         sut?.load(completion: { capturedResults.append($0) })
         sut = nil
@@ -113,7 +113,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     private func expect(
         _ sut: RemoteFeedLoader,
-        toCompleteWith expectedResult: LoadFeedResult,
+        toCompleteWith expectedResult: FeedLoader.Result,
         file: StaticString = #file,
         line: UInt = #line,
         when action: () -> Void
@@ -134,7 +134,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         wait(for: [expectation], timeout: 0.1)
     }
     
-    func failure(_ error: RemoteFeedLoader.Error) -> LoadFeedResult {
+    func failure(_ error: RemoteFeedLoader.Error) -> FeedLoader.Result {
         .failure(error)
     }
     

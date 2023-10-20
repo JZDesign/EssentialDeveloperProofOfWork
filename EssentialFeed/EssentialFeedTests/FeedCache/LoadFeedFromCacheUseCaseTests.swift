@@ -121,7 +121,7 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
     
     func expect(
         _ sut: LocalFeedLoader,
-        toCompleteWith expectedResult: LoadFeedResult,
+        toCompleteWith expectedResult: FeedLoader.Result,
         file: StaticString = #file,
         line: UInt = #line,
         when action: () -> Void

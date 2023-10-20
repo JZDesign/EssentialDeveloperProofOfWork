@@ -7,9 +7,9 @@
 
 import Foundation
 
-public typealias HTTPClientResult = Result<(response: HTTPURLResponse, data: Data), Error>
 
 public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void)
+    typealias Result = Swift.Result<(response: HTTPURLResponse, data: Data), Error>
+    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void)
     
 }
