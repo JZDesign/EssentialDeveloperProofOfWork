@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol FeedStore {
-    typealias RetrievalResult = Result<CachedFeed, Error>
+    typealias RetrievalResult = Result<CachedFeed?, Error>
     typealias RetrievalCompletion = (RetrievalResult) -> Void
     typealias DeletionCompletion = (Error?) -> Void
     typealias InsertionCompletion = (Error?) -> Void
@@ -18,8 +18,12 @@ public protocol FeedStore {
     func insert(_ images: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion)
 }
 
-public enum CachedFeed {
-    case empty
-    case failure(Error)
-    case found(images: [LocalFeedImage], timestamp: Date)
+public struct CachedFeed: Equatable {
+    let images: [LocalFeedImage]
+    let timestamp: Date
+
+    public init(images: [LocalFeedImage], timestamp: Date) {
+        self.images = images
+        self.timestamp = timestamp
+    }
 }
