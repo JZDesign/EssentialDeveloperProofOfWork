@@ -10,8 +10,12 @@ import Foundation
 public protocol FeedStore {
     typealias RetrievalResult = Result<CachedFeed?, Error>
     typealias RetrievalCompletion = (RetrievalResult) -> Void
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
+    
+    typealias DeletionResult = Error?
+    typealias DeletionCompletion = (DeletionResult) -> Void
+    
+    typealias InsertionResult = Error?
+    typealias InsertionCompletion = (InsertionResult) -> Void
     
     func retrieve(completion: @escaping RetrievalCompletion)
     func deleteCachedFeed(completion: @escaping DeletionCompletion)
