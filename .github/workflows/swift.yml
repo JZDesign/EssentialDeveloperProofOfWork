@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build & Test
-      scrpipt:
+      script:
         - xcodebuild clean build test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI_macos" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk macosx -destination "platform=macOS" ONLY_ACTIVE_ARCH=YES
         - xcodebuild clean build test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI_ios" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphonesimulator -destination "platform=iOS Simulator,OS=15.0,name=iPhone 15" ONLY_ACTIVE_ARCH=YES
