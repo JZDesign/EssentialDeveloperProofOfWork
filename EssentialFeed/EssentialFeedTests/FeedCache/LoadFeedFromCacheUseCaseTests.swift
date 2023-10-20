@@ -147,6 +147,6 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         }
         
         action()
-        self.wait(for: [expectation])
+        wait(for: [expectation], timeout: 2)
     }
 }

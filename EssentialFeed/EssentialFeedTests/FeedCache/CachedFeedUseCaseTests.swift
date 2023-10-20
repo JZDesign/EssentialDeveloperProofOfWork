@@ -112,8 +112,8 @@ final class CachedFeedUseCaseTests: XCTestCase {
         }
         
         action()
-        wait(for: [expectation])
-        
+        wait(for: [expectation], timeout: 2)
+
         XCTAssertEqual(expectedError, recievedError as? EquatableError, file: file, line: line)
     }
 }
