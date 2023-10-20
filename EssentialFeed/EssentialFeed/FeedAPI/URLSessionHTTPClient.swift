@@ -13,13 +13,15 @@ extension URLSession: HTTPClient {
     
     public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
         dataTask(with: url) { data, response, error in
-            if let error {
-                completion(.failure(error))
-            } else if let data, let response = response as? HTTPURLResponse {
-                completion(.success((response, data)))
-            } else {
-                completion(.failure(UnexpectedValuesRepresentation()))
-            }
+            completion(Result {
+                if let error {
+                    throw error
+                } else if let data, let response = response as? HTTPURLResponse {
+                    return (response, data)
+                } else {
+                    throw UnexpectedValuesRepresentation()
+                }
+            })
         }.resume()
     }
 }
