@@ -16,13 +16,13 @@ final class CachedFeedUseCaseTests: XCTestCase {
 
     func test_save_deletesCache() {
         let (sut, store) = makeSUT()
-        sut.save(uniqueImages().model)
+        sut.save(uniqueImages().model) { _ in }
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
     
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
         let (sut, store) = makeSUT()
-        sut.save(uniqueImages().model)
+        sut.save(uniqueImages().model) { _ in }
         store.completeDeletion(with: .init())
                 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
@@ -32,7 +32,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         let images = uniqueImages()
         let timestamp = Date.now
         let (sut, store) = makeSUT(currentDate: { timestamp })
-        sut.save(images.model)
+        sut.save(images.model) { _ in }
         store.completeDeletionSuccessfully()
                 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(images.local, timestamp)])
@@ -68,7 +68,9 @@ final class CachedFeedUseCaseTests: XCTestCase {
     func test_save_doesNotDeliverInsertionErrorAfterSUTHasBeenDeallocated() {
         var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
         var result = [Error?]()
-        sut?.save([]) { result.append($0) }
+        sut?.save([]) { _result in
+            if case let Result.failure(error) = _result { result.append(error) }
+        }
         store.completeDeletionSuccessfully()
         sut = nil
         store.completeInsertion(with: .init())
@@ -79,7 +81,9 @@ final class CachedFeedUseCaseTests: XCTestCase {
     func test_save_doesNotDeliverDeletionErrorAfterSUTHasBeenDeallocated() {
         var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
         var result = [Error?]()
-        sut?.save([]) { result.append($0) }
+        sut?.save([]) { _result in
+            if case let Result.failure(error) = _result { result.append(error) }
+        }
         sut = nil
         store.completeDeletion(with: .init())
         XCTAssertEqual(result.count, 0)
@@ -102,8 +106,8 @@ final class CachedFeedUseCaseTests: XCTestCase {
         
         let expectation = expectation(description: #function)
         
-        sut.save([]) {
-            recievedError = $0
+        sut.save([]) { _result in
+            if case let Result.failure(error) = _result { recievedError = error }
             expectation.fulfill()
         }
         

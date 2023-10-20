@@ -10,7 +10,7 @@ import Foundation
 public class LocalFeedLoader: FeedLoader {
     let store: FeedStore
     let currentDate: () -> Date
-    public typealias SaveResult = (Error?) -> Void
+    public typealias SaveResult = Result<Void, Error>
     
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -31,13 +31,14 @@ public class LocalFeedLoader: FeedLoader {
         }
     }
     
-    public func save(_ images: [FeedImage], completion: @escaping SaveResult = { _ in }) {
-        store.deleteCachedFeed { [weak self] error in
+    public func save(_ images: [FeedImage], completion: @escaping (SaveResult) -> Void) {
+        store.deleteCachedFeed { [weak self] deletionResult in
             guard let self else { return }
-            if let error {
-                completion(error)
-            } else {
+            switch deletionResult {
+            case .success:
                 self.cache(images, with: completion)
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -55,10 +56,10 @@ public class LocalFeedLoader: FeedLoader {
         }
     }
     
-    private func cache(_ images: [FeedImage], with completion: @escaping SaveResult) {
-        store.insert(images.map(\.asLocal), timestamp: currentDate()) { [weak self] error in
+    private func cache(_ images: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
+        store.insert(images.map(\.asLocal), timestamp: currentDate()) { [weak self] result in
             guard self != nil else { return }
-            completion(error)
+            completion(result)
         }
     }
     
