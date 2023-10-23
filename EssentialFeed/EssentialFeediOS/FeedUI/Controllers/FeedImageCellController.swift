@@ -13,7 +13,6 @@ protocol FeedImageCellControllerDelegate {
     func didCancelImageRequest()
 }
 
-
 final class FeedImageCellController: FeedImageView {
     private let delegate: FeedImageCellControllerDelegate
     private lazy var cell = FeedImageCell()
