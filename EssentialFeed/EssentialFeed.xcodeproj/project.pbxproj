@@ -256,8 +256,7 @@
 		424A6A1A2AE2FABC00B4F319 /* EssentialFeediOS */ = {
 			isa = PBXGroup;
 			children = (
-				42DED8D62AE697B40093EF6C /* Views */,
-				42DED8D52AE697A50093EF6C /* Controllers */,
+				42DED8DF2AE699980093EF6C /* FeedUI */,
 			);
 			path = EssentialFeediOS;
 			sourceTree = "<group>";
@@ -362,6 +361,15 @@
 				42DED8D22AE6920C0093EF6C /* UIView+Shimmering.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		42DED8DF2AE699980093EF6C /* FeedUI */ = {
+			isa = PBXGroup;
+			children = (
+				42DED8D62AE697B40093EF6C /* Views */,
+				42DED8D52AE697A50093EF6C /* Controllers */,
+			);
+			path = FeedUI;
 			sourceTree = "<group>";
 		};
 		42FB00B92ADD5733001953DA /* FeedAPI */ = {
