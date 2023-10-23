@@ -9,7 +9,19 @@ import Foundation
 import UIKit
 import EssentialFeed
 
-final class FeedImageViewModel<Image> {
+struct FeedImageViewModel<Image> {
+    let description: String?
+    let location: String?
+    let image: Image?
+    let isLoading: Bool
+    let shouldRetry: Bool
+    
+    var hasLocation: Bool {
+        return location != nil
+    }
+}
+
+final class _FeedImageViewModel_<Image> {
     typealias Observer<T> = (T) -> Void
 
     private var task: FeedImageDataLoaderTask?
