@@ -80,8 +80,8 @@ final class FeedViewControllerTests: XCTestCase {
     func test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError() {
         let image0 = makeImage()
         let (sut, loader) = makeSUT()
+        sut.simulateAppearance()
         
-        sut.simulateUserInitiatedFeedReload()
         loader.completeFeedLoading(with: [image0], at: 0)
         assertThat(sut, isRendering: [image0])
         

@@ -7,9 +7,9 @@
 
 import UIKit
 import EssentialFeed
-import EssentialFeediOS
+@testable import EssentialFeediOS
 
-extension UITableViewController {
+extension FeedViewController {
     func simulateAppearance() {
         if !isViewLoaded {
             loadViewIfNeeded()
@@ -17,6 +17,7 @@ extension UITableViewController {
         
         beginAppearanceTransition(true, animated: false)
         endAppearanceTransition()
+        RunLoop.current.run(until: .now)
     }
     
     func prepareForFirstAppearance() {
@@ -31,13 +32,14 @@ extension UITableViewController {
     private func replaceRefreshControlWithSpyForiOS17Support() {
         let spyRefreshControl = UIRefreshControlSpy()
         
-        refreshControl?.allTargets.forEach { target in
-            refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
+        refreshController?.view.allTargets.forEach { target in
+            refreshController?.view.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
                 spyRefreshControl.addTarget(target, action: Selector(action), for: .valueChanged)
             }
         }
         
         refreshControl = spyRefreshControl
+        refreshController?.view = spyRefreshControl
     }
 }
 
