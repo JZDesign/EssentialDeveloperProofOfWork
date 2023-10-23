@@ -11,14 +11,13 @@ extension UITableViewController {
     func simulateAppearance() {
         if !isViewLoaded {
             loadViewIfNeeded()
-            prepareForFirstAppearance()
         }
         
         beginAppearanceTransition(true, animated: false)
         endAppearanceTransition()
     }
     
-    private func prepareForFirstAppearance() {
+    func prepareForFirstAppearance() {
         setSmallFrameToPreventRenderingCells()
         replaceRefreshControlWithSpyForiOS17Support()
     }
