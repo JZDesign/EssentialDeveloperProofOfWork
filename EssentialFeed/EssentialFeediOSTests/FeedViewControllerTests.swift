@@ -165,11 +165,11 @@ private extension FeedViewController {
     }
     
     var isShowingLoadingIndicator: Bool {
-        return refreshControl?.isRefreshing == true
+        refreshControl?.isRefreshing == true
     }
     
     func numberOfRenderedFeedImageViews() -> Int {
-        return tableView.numberOfRows(inSection: feedImagesSection)
+        tableView.numberOfRows(inSection: feedImagesSection)
     }
     
     func feedImageView(at row: Int) -> UITableViewCell? {
@@ -179,7 +179,11 @@ private extension FeedViewController {
     }
     
     private var feedImagesSection: Int {
-        return 0
+        0
+    }
+    
+    func simulateFeedImageViewVisible(at index: Int) {
+        _ = feedImageView(at: index)
     }
 }
 
