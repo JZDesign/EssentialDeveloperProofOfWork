@@ -11,7 +11,7 @@
         <!--My Feed-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="My Feed" id="BYZ-38-t0r" customClass="FeedViewController" customModule="Prototype" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="My Feed" id="BYZ-38-t0r" customClass="FeedViewController" customModule="Prototype" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="0s3-tO-aBy">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -22,7 +22,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="5la-7G-hd0">
-                            <rect key="frame" x="0.0" y="650" width="393" height="16"/>
+                            <rect key="frame" x="0.0" y="836" width="393" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
@@ -110,6 +110,7 @@ Label</string>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="descriptionLabel" destination="90k-lG-0RB" id="nKS-qP-VrT"/>
+                                    <outlet property="feedImageContainer" destination="wTX-SE-kWY" id="KeO-Xi-w3d"/>
                                     <outlet property="feedImageView" destination="CpH-fy-37V" id="fOO-AK-EUA"/>
                                     <outlet property="locationContainer" destination="aP5-Q0-zMM" id="Khe-9u-U4n"/>
                                     <outlet property="locationLabel" destination="HId-h9-vde" id="0AM-M8-IgF"/>
@@ -118,7 +119,13 @@ Label</string>
                         </prototypes>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Feed" id="EJQ-d5-oVJ"/>
-                </viewController>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="bT8-28-srO">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh" destination="BYZ-38-t0r" eventType="valueChanged" id="4Mb-Ed-o3m"/>
+                        </connections>
+                    </refreshControl>
+                </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1011.4503816793892" y="-28.169014084507044"/>
