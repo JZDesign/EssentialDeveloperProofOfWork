@@ -11,19 +11,19 @@ import EssentialFeed
 final class FeedRefreshViewController: NSObject, FeedLoadingView {
     var _view = UIRefreshControl()
     private(set) lazy var view = loadView()
-    private let presenter: FeedPresenter
-    
-    init(presenter: FeedPresenter) {
-        self.presenter = presenter
+    private let loadFeed: () -> Void
+
+    init(loadFeed: @escaping () -> Void) {
+        self.loadFeed = loadFeed
     }
 
     @objc func refresh() {
-        presenter.loadFeed()
+        loadFeed()
     }
     
     
-    func display(isLoading: Bool) {
-        if isLoading {
+    func display(_ viewModel: FeedLoadingViewModel) {
+        if viewModel.isLoading {
             view.beginRefreshing()
         } else {
             view.endRefreshing()
