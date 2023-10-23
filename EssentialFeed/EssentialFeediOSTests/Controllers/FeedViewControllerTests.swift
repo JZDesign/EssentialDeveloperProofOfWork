@@ -20,6 +20,15 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.title, localized("FEED_VIEW_TITLE"))
     }
     
+    func test_errorView_doesNotRenderErrorOnLoad() {
+        let (sut, _) = makeSUT()
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(sut.errorMessage, nil)
+    }
+
+    
     func test_init_doesNotLoadFeed() {
         let (_, loader) = makeSUT()
         

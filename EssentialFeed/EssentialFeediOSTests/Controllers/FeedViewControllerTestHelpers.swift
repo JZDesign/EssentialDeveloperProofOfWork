@@ -14,6 +14,10 @@ extension FeedViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
+    var errorMessage: String? {
+        errorView.message
+    }
+    
     var isShowingLoadingIndicator: Bool {
         refreshControl?.isRefreshing == true
     }
