@@ -48,4 +48,8 @@ extension FeedViewControllerTests {
     func makeImage(description: String? = nil, location: String? = nil, url: URL = URL(string: "http://any-url.com")!) -> FeedImage {
         return FeedImage(id: UUID(), description: description, location: location, url: url)
     }
+    
+    func anyImageData() -> Data {
+        UIImage.make(withColor: .red).pngData()!
+    }
 }

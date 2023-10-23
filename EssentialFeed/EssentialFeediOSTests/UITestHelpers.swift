@@ -31,12 +31,12 @@ extension FeedViewController {
     
     private func replaceRefreshControlWithSpyForiOS17Support() {
         let spyRefreshControl = UIRefreshControlSpy()
-        refreshController?._view = spyRefreshControl
-        refreshController?.view.allTargets.forEach { target in
-            refreshController?.view.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
+        refreshControl?.allTargets.forEach { target in
+            refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { action in
                 spyRefreshControl.addTarget(target, action: Selector(action), for: .valueChanged)
             }
         }
+        refreshControl = spyRefreshControl
     }
 }
 
