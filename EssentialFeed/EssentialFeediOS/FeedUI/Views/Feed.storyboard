@@ -29,6 +29,7 @@
                                 </label>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <gestureRecognizers/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="MMk-Fg-aLD" secondAttribute="trailing" id="9ua-3t-HMv"/>
                                 <constraint firstItem="MMk-Fg-aLD" firstAttribute="top" secondItem="Dwd-e3-FyI" secondAttribute="top" id="POP-3e-7vX"/>
@@ -37,10 +38,11 @@
                             </constraints>
                             <connections>
                                 <outlet property="label" destination="MMk-Fg-aLD" id="A1d-qn-nwK"/>
+                                <outletCollection property="gestureRecognizers" destination="Xco-ao-93A" appends="YES" id="bdx-7n-6FA"/>
                             </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="5la-7G-hd0">
-                            <rect key="frame" x="0.0" y="668" width="393" height="16"/>
+                            <rect key="frame" x="0.0" y="836" width="393" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
@@ -167,6 +169,11 @@ Label</string>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Xco-ao-93A">
+                    <connections>
+                        <action selector="hideMessageAnimated" destination="Dwd-e3-FyI" id="UlB-Ht-6Df"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1011.4503816793892" y="-28.169014084507044"/>
         </scene>
