@@ -23,7 +23,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
 
     private var hasAppeared = false
 
-    public let errorView = ErrorView()
+    @IBOutlet private(set) public var errorView: ErrorView?
 
     var tableModel = [FeedImageCellController]() {
         didSet { tableView.reloadData() }
@@ -48,7 +48,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: FeedErrorViewModel) {
-        errorView.message = viewModel.message
+        errorView?.message = viewModel.message
     }
     
     func display(_ viewModel: FeedLoadingViewModel) {
