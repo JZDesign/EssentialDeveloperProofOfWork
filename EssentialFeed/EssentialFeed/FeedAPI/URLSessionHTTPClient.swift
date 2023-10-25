@@ -8,11 +8,10 @@
 import Foundation
 
 extension URLSession: HTTPClient {
-    
     private struct UnexpectedValuesRepresentation: Error {}
     
-    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
-        dataTask(with: url) { data, response, error in
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+        let task = dataTask(with: url) { data, response, error in
             completion(Result {
                 if let error {
                     throw error
@@ -22,6 +21,16 @@ extension URLSession: HTTPClient {
                     throw UnexpectedValuesRepresentation()
                 }
             })
-        }.resume()
+        }
+        task.resume()
+        return URLSessionTaskWrapper(wrapped: task)
+    }
+    
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+        let wrapped: URLSessionTask
+        
+        func cancel() {
+            wrapped.cancel()
+        }
     }
 }

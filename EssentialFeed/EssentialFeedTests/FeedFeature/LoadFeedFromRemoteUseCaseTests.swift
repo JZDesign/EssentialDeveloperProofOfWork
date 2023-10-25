@@ -46,7 +46,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         [199, 201, 400, 500].forEach { statusCode in
             let (sut, client) = makeSUT()
             expect(sut, toCompleteWith: failure(.invalidData)) {
-                client.complete(with: statusCode)
+                client.complete(withStatusCode: statusCode)
             }
         }
     }
@@ -55,7 +55,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: failure(.invalidData)) {
-            client.complete(with: 200, data: "invalid".data(using: .utf8)!)
+            client.complete(withStatusCode: 200, data: "invalid".data(using: .utf8)!)
         }
     }
     
@@ -63,7 +63,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: .success([])) {
-            client.complete(with: 200, data: #"{"items": []}"#.data(using: .utf8)!)
+            client.complete(withStatusCode: 200, data: #"{"items": []}"#.data(using: .utf8)!)
         }
     }
     
@@ -75,7 +75,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         
         expect(sut, toCompleteWith: .success([image.model, image2.model])) {
             let json = makeItemsJson(items: [image.json, image2.json])
-            client.complete(with: 200, data: try! JSONSerialization.data(withJSONObject: json))
+            client.complete(withStatusCode: 200, data: try! JSONSerialization.data(withJSONObject: json))
         }
     }
     
@@ -86,7 +86,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         sut?.load(completion: { capturedResults.append($0) })
         sut = nil
         
-        client.complete(with: 200, data: try! JSONSerialization.data(withJSONObject: makeItemsJson(items: [])))
+        client.complete(withStatusCode: 200, data: try! JSONSerialization.data(withJSONObject: makeItemsJson(items: [])))
         
         XCTAssertTrue(capturedResults.isEmpty)
     }
