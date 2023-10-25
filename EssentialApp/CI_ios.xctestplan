@@ -1,8 +1,8 @@
 {
   "configurations" : [
     {
-      "id" : "829ACDB6-F477-457D-837E-405258473766",
-      "name" : "Test Scheme Action",
+      "id" : "97660597-C818-410C-9D75-17CD2143925C",
+      "name" : "Configuration 1",
       "options" : {
 
       }
@@ -15,14 +15,15 @@
       "referenceType" : "built-in"
     },
     "region" : "US",
-    "testExecutionOrdering" : "random"
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:EssentialFeed.xcodeproj",
-        "identifier" : "424A6A2F2AE2FB9500B4F319",
-        "name" : "CI_ios"
+        "containerPath" : "container:..\/EssentialApp\/EssentialApp.xcodeproj",
+        "identifier" : "42CD0C9F2AE8B18C000DBA32",
+        "name" : "EssentialAppTests"
       }
     },
     {
@@ -51,13 +52,6 @@
         "containerPath" : "container:EssentialFeed.xcodeproj",
         "identifier" : "424A6A1F2AE2FABC00B4F319",
         "name" : "EssentialFeediOSTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/EssentialApp\/EssentialApp.xcodeproj",
-        "identifier" : "42CD0C9F2AE8B18C000DBA32",
-        "name" : "EssentialAppTests"
       }
     }
   ],
