@@ -8,9 +8,11 @@
 import Foundation
 
 public class LocalFeedLoader: FeedLoader {
+    public typealias SaveResult = Result<Void, Error>
+    public typealias ValidationResult = Result<Void, Error>
+    
     let store: FeedStore
     let currentDate: () -> Date
-    public typealias SaveResult = Result<Void, Error>
     
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -43,15 +45,16 @@ public class LocalFeedLoader: FeedLoader {
         }
     }
     
-    public func validateCache() {
+    public func validateCache(completion: @escaping (ValidationResult) -> Void) {        
         store.retrieve { [weak self] in
             guard let self else { return }
             switch $0 {
             case .failure:
-                self.store.deleteCachedFeed { _ in }
+                self.store.deleteCachedFeed(completion: completion)
             case let .success(.some(feed)) where !FeedCachePolicy.validate(feed.timestamp, againstDate: self.currentDate()):
-                self.store.deleteCachedFeed { _ in }
-            default: break
+                self.store.deleteCachedFeed(completion: completion)
+            case .success:
+                completion(.success(()))
             }
         }
     }
