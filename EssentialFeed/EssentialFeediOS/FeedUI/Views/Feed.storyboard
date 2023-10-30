@@ -93,6 +93,7 @@ Label</string>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CpH-fy-37V">
                                                             <rect key="frame" x="0.0" y="0.0" width="369" height="369"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="feed-image-view"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" secondItem="wTX-SE-kWY" secondAttribute="height" multiplier="1:1" id="zKo-0z-QLG"/>
                                                             </constraints>
@@ -140,6 +141,7 @@ Label</string>
                                         <constraint firstAttribute="trailing" secondItem="52E-ZM-a6k" secondAttribute="trailing" constant="12" id="r3g-Av-dca"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <accessibility key="accessibilityConfiguration" identifier="feed-image-cell"/>
                                 <connections>
                                     <outlet property="descriptionLabel" destination="90k-lG-0RB" id="gFP-Ob-VtH"/>
                                     <outlet property="feedImageContainer" destination="wTX-SE-kWY" id="fR7-fZ-iBb"/>
