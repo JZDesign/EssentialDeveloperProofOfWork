@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		4200F58B2AE95B29005655E7 /* CI_ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4200F58A2AE95B29005655E7 /* CI_ios.swift */; };
 		42C187CA2AF01E2400750B18 /* DebugSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C187C92AF01E2400750B18 /* DebugSceneDelegate.swift */; };
+		42C187CD2AF17D3500750B18 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C187CB2AF17D3500750B18 /* EssentialFeed.framework */; };
+		42C187CE2AF17D3500750B18 /* EssentialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C187CB2AF17D3500750B18 /* EssentialFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42C187CF2AF17D3500750B18 /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C187CC2AF17D3500750B18 /* EssentialFeediOS.framework */; };
+		42C187D02AF17D3500750B18 /* EssentialFeediOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C187CC2AF17D3500750B18 /* EssentialFeediOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42C3F4E12AE9AA4200F53443 /* FeedLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3F4E02AE9AA4200F53443 /* FeedLoaderCacheDecoratorTests.swift */; };
 		42C3F4E32AE9ABE800F53443 /* FeedLoaderStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3F4E22AE9ABE800F53443 /* FeedLoaderStub.swift */; };
 		42C3F4E52AE9AC6C00F53443 /* FeedLoaderTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3F4E42AE9AC6C00F53443 /* FeedLoaderTestCase.swift */; };
@@ -60,6 +64,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		42C187D12AF17D3500750B18 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				42C187CE2AF17D3500750B18 /* EssentialFeed.framework in Embed Frameworks */,
+				42C187D02AF17D3500750B18 /* EssentialFeediOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		42CD0CC62AE94F39000DBA32 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,6 +94,8 @@
 		4200F5882AE95B28005655E7 /* CI_ios.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CI_ios.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4200F58A2AE95B29005655E7 /* CI_ios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CI_ios.swift; sourceTree = "<group>"; };
 		42C187C92AF01E2400750B18 /* DebugSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSceneDelegate.swift; sourceTree = "<group>"; };
+		42C187CB2AF17D3500750B18 /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42C187CC2AF17D3500750B18 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C3F4DF2AE95D0500F53443 /* CI_ios.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI_ios.xctestplan; sourceTree = "<group>"; };
 		42C3F4E02AE9AA4200F53443 /* FeedLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 		42C3F4E22AE9ABE800F53443 /* FeedLoaderStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderStub.swift; sourceTree = "<group>"; };
@@ -112,6 +130,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42C187CD2AF17D3500750B18 /* EssentialFeed.framework in Frameworks */,
+				42C187CF2AF17D3500750B18 /* EssentialFeediOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +239,8 @@
 		42CD0CBF2AE94F39000DBA32 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42C187CB2AF17D3500750B18 /* EssentialFeed.framework */,
+				42C187CC2AF17D3500750B18 /* EssentialFeediOS.framework */,
 				42CD0CC02AE94F39000DBA32 /* EssentialFeed.framework */,
 				42CD0CC12AE94F39000DBA32 /* EssentialFeediOS.framework */,
 			);
@@ -235,6 +257,7 @@
 				4200F5842AE95B28005655E7 /* Sources */,
 				4200F5852AE95B28005655E7 /* Frameworks */,
 				4200F5862AE95B28005655E7 /* Resources */,
+				42C187D12AF17D3500750B18 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -478,7 +501,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5X48PFL69D;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jzdesign.CI-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -497,7 +520,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5X48PFL69D;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jzdesign.CI-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
