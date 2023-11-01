@@ -101,7 +101,7 @@ Label</string>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9AT-49-34l">
                                                             <rect key="frame" x="147" y="167" width="75" height="35"/>
                                                             <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="plain" title="↻"/>
                                                             <connections>
                                                                 <action selector="retryButtonTapped" destination="Qmj-g1-Ikw" eventType="touchUpInside" id="oTJ-t0-4c6"/>
                                                             </connections>
