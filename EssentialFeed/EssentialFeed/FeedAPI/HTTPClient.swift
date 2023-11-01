@@ -5,6 +5,7 @@
 //  Created by Jacob Rakidzich on 10/13/23.
 //
 
+import Combine
 import Foundation
 
 public protocol HTTPClientTask {
@@ -22,5 +23,21 @@ public extension HTTPURLResponse {
 
     var isOK: Bool {
         return statusCode == HTTPURLResponse.OK_200
+    }
+}
+
+public extension HTTPClient {
+    typealias Publisher = AnyPublisher<(response: HTTPURLResponse, data: Data), Error>
+
+    func getPublisher(url: URL) -> Publisher {
+        var task: HTTPClientTask?
+
+        return Deferred {
+            Future { completion in
+                task = self.get(from: url, completion: completion)
+            }
+        }
+        .handleEvents(receiveCancel: { task?.cancel() })
+        .eraseToAnyPublisher()
     }
 }
