@@ -23,13 +23,15 @@ extension FeedViewControllerTests {
     }
     
     func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
-        let loader = createAndTrackMemoryLeaks(LoaderSpy())
-        let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader))
+        let loader = createAndTrackMemoryLeaks(LoaderSpy(), file: file, line: line)
+        let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader), file: file, line: line)
         sut.prepareForFirstAppearance()
         return (sut, loader)
     }
     
     func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+        sut.view.enforceLayoutCycle()
+
         guard sut.numberOfRenderedFeedImageViews() == feed.count else {
             return XCTFail("Expected \(feed.count) images, got \(sut.numberOfRenderedFeedImageViews()) instead.", file: file, line: line)
         }
@@ -37,6 +39,7 @@ extension FeedViewControllerTests {
         feed.enumerated().forEach { index, image in
             assertThat(sut, hasViewConfiguredFor: image, at: index, file: file, line: line)
         }
+        RunLoop.main.run(until: Date() + 1) // clean up instances
     }
     
     func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
@@ -60,5 +63,12 @@ extension FeedViewControllerTests {
     
     func anyImageData() -> Data {
         UIImage.make(withColor: .red).pngData()!
+    }
+}
+
+extension UIView {
+    func enforceLayoutCycle() {
+        layoutIfNeeded()
+        RunLoop.current.run(until: Date())
     }
 }
