@@ -11,10 +11,6 @@ import EssentialFeed
 import EssentialFeediOS
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    let localStoreURL = NSPersistentContainer
-            .defaultDirectoryURL()
-            .appendingPathComponent("feed-store.sqlite")
-
     var window: UIWindow?
 
     private lazy var httpClient: HTTPClient = {
@@ -22,7 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }()
 
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(storeURL: localStoreURL)
+        try! CoreDataFeedStore(storeURL: NSPersistentContainer
+            .defaultDirectoryURL()
+            .appendingPathComponent("feed-store.sqlite")
+        )
     }()
 
     convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
@@ -42,13 +41,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func configureWindow() {
         let remoteURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
         
-        let remoteClient = makeRemoteClient()
         
         let localFeedLoader = LocalFeedLoader(store: store, currentDate: Date.init)
         let localImageLoader = LocalFeedImageDataLoader(store: store)
         
-        let remoteFeedLoader = RemoteFeedLoader(url: remoteURL, client: remoteClient)
-        let remoteImageLoader = RemoteFeedImageDataLoader(client: remoteClient)
+        let remoteFeedLoader = RemoteFeedLoader(url: remoteURL, client: httpClient)
+        let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
         window?.rootViewController = UINavigationController(
             rootViewController: FeedUIComposer.feedComposedWith(
                 feedLoader: FeedLoaderWithFallbackComposite(
@@ -94,10 +92,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
-    }
-
-
-    func makeRemoteClient() -> HTTPClient {
-        httpClient
     }
 }
