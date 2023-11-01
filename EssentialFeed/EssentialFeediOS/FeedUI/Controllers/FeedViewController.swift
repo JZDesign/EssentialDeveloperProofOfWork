@@ -8,12 +8,12 @@
 import Foundation
 import UIKit
 
-protocol FeedViewControllerDelegate {
+public protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
 public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView, FeedErrorView {
-    var delegate: FeedViewControllerDelegate?
+    public var delegate: FeedViewControllerDelegate?
 
     private var cellControllers = [IndexPath: FeedImageCellController]()
 
@@ -21,7 +21,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
 
     @IBOutlet private(set) public var errorView: ErrorView?
 
-    var tableModel = [FeedImageCellController]() {
+    private var tableModel = [FeedImageCellController]() {
         didSet { tableView.reloadData() }
     }
     
@@ -29,6 +29,10 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
         super.viewDidLoad()
     }
     
+    public func display(_ cellControllers: [FeedImageCellController]) {
+        tableModel = cellControllers
+    }
+
     public override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         guard hasAppeared else {
