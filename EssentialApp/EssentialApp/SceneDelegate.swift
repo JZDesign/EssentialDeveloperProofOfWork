@@ -23,6 +23,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        configureWindow()
+    }
+
+    func configureWindow() {
         let remoteURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
         
         let remoteClient = makeRemoteClient()
@@ -33,20 +37,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let remoteFeedLoader = RemoteFeedLoader(url: remoteURL, client: remoteClient)
         let remoteImageLoader = RemoteFeedImageDataLoader(client: remoteClient)
-        
-        window?.rootViewController = FeedUIComposer.feedComposedWith(
-            feedLoader: FeedLoaderWithFallbackComposite(
-                primary: FeedLoaderCacheDecorator(
-                    decoratee: remoteFeedLoader,
-                    cache: localFeedLoader
+        window?.rootViewController = UINavigationController(
+            rootViewController: FeedUIComposer.feedComposedWith(
+                feedLoader: FeedLoaderWithFallbackComposite(
+                    primary: FeedLoaderCacheDecorator(
+                        decoratee: remoteFeedLoader,
+                        cache: localFeedLoader),
+                    fallback: localFeedLoader
                 ),
-                fallback: localFeedLoader
-            ),
-            imageLoader: FeedImageDataLoaderWithFallbackComposite(
-                primary: localImageLoader,
-                fallback: FeedImageDataLoaderCacheDecorator(
-                    decoratee: remoteImageLoader,
-                    cache: localImageLoader
+                imageLoader: FeedImageDataLoaderWithFallbackComposite(
+                    primary: localImageLoader,
+                    fallback: FeedImageDataLoaderCacheDecorator(
+                        decoratee: remoteImageLoader,
+                        cache: localImageLoader
+                    )
                 )
             )
         )
