@@ -9,11 +9,11 @@ import Combine
 import EssentialFeed
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
-    private let feedLoader: () -> FeedLoader.Publisher
+    private let feedLoader: () -> AnyPublisher<[FeedImage], Error>
     private var cancellable: Cancellable?
     var presenter: FeedPresenter?
 
-    init(feedLoader: @escaping () -> FeedLoader.Publisher) {
+    init(feedLoader: @escaping () ->  AnyPublisher<[FeedImage], Error>) {
         self.feedLoader = feedLoader
     }
 
@@ -36,7 +36,7 @@ final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     }
 }
 
-public extension FeedLoader {
+public extension LocalFeedLoader {
     typealias Publisher = AnyPublisher<[FeedImage], Error>
     
     func loadPublisher() -> Publisher {

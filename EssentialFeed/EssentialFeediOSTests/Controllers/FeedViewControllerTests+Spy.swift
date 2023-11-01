@@ -7,33 +7,36 @@
 
 import XCTest
 import UIKit
+import Combine
 import EssentialFeed
 import EssentialFeediOS
 
 extension FeedViewControllerTests {
     
-    class LoaderSpy: FeedLoader, FeedImageDataLoader {
+    class LoaderSpy: FeedImageDataLoader {
         // MARK: - FeedLoader
         
-        private var feedRequests = [(FeedLoader.Result) -> Void]()
+        private var feedRequests = [PassthroughSubject<[FeedImage], Error>]()
         var loadFeedCallCount: Int {
             feedRequests.count
         }
         
-        func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            feedRequests.append(completion)
-        }
-        
         func completeFeedLoading(with images: [FeedImage] = [], at index: Int = 0) {
-            feedRequests[index](.success(images))
+            feedRequests[index].send(images)
         }
         
         func completeFeedLoadingWithError(error: EquatableError = .init(), at index: Int = 0) {
-            feedRequests[index](.failure(error))
+            feedRequests[index].send(completion: .failure(error))
         }
         
         // MARK: - FeedImageDataLoader
         
+        func loadPublisher() -> AnyPublisher<[FeedImage], Error> {
+            let publisher = PassthroughSubject<[FeedImage], Error>()
+            feedRequests.append(publisher)
+            return publisher.eraseToAnyPublisher()
+        }
+
         private var imageRequests = [(url: URL, completion: (FeedImageDataLoader.Result) -> Void)]()
         
         var loadedImageURLs: [URL] {

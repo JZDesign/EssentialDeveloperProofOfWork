@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 public protocol FeedImageDataLoaderTask {
     func cancel()
@@ -65,5 +66,21 @@ public final class RemoteFeedImageDataLoader: FeedImageDataLoader {
                 })
         }
         return task
+    }
+}
+
+public extension HTTPClient {
+    typealias Publisher = AnyPublisher<(response: HTTPURLResponse, data: Data), Error>
+
+    func getPublisher(url: URL) -> Publisher {
+        var task: HTTPClientTask?
+
+        return Deferred {
+            Future { completion in
+                task = self.get(from: url, completion: completion)
+            }
+        }
+        .handleEvents(receiveCancel: { task?.cancel() })
+        .eraseToAnyPublisher()
     }
 }

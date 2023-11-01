@@ -7,17 +7,21 @@
 
 import Foundation
 
-enum FeedItemsMapper {
+public enum FeedItemsMapper {
     private static func isOK(_ code: Int) -> Bool {
         code == 200
     }
-
-    static func map(_ data: Data, response: HTTPURLResponse) -> [FeedImage]? {
-        if isOK(response.statusCode), let items = try? JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedImage) {
-            return items
+    
+    public static func map(response: HTTPURLResponse, data: Data) throws -> [FeedImage] {
+        if isOK(response.statusCode) {
+            return try JSONDecoder().decode(Root.self, from: data).items.map(\.asFeedImage)
         } else {
-            return nil
+            throw Error.invalidData
         }
+    }
+
+    public enum Error: Swift.Error {
+        case invalidData
     }
     
     private struct Root: Decodable {
@@ -25,7 +29,7 @@ enum FeedItemsMapper {
     }
 }
 
-struct RemoteFeedItem: Decodable {
+public struct RemoteFeedItem: Decodable {
     let id: UUID
     let description: String?
     let location: String?

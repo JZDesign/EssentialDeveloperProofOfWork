@@ -7,10 +7,11 @@
 
 import Foundation
 
-public class LocalFeedLoader: FeedLoader, FeedCache  {
+public class LocalFeedLoader: FeedCache  {
     public typealias SaveResult = FeedCache.Result
     public typealias ValidationResult = Result<Void, Error>
-    
+    public typealias LoadResult = Swift.Result<[FeedImage], Error>
+
     let store: FeedStore
     let currentDate: () -> Date
     
@@ -19,7 +20,7 @@ public class LocalFeedLoader: FeedLoader, FeedCache  {
         self.currentDate = currentDate
     }
     
-    public func load(completion: @escaping (FeedLoader.Result) -> Void) {
+    public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] in
             guard let self else { return }
             switch $0 {
