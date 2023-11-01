@@ -14,6 +14,10 @@ extension FeedViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
+    func renderedFeedImageData(at index: Int) -> Data? {
+        simulateFeedImageViewVisible(at: index)?.renderedImage
+    }
+    
     var errorMessage: String? {
         errorView?.message
     }
