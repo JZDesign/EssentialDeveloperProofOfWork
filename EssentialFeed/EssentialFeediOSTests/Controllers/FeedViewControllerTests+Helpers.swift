@@ -24,7 +24,7 @@ extension FeedViewControllerTests {
     
     func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
         let loader = createAndTrackMemoryLeaks(LoaderSpy(), file: file, line: line)
-        let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader, imageLoader: loader), file: file, line: line)
+        let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImageDataPublisher), file: file, line: line)
         sut.prepareForFirstAppearance()
         return (sut, loader)
     }
