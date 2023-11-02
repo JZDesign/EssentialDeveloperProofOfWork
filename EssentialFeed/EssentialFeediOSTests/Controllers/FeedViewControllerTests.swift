@@ -58,8 +58,6 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadFeedCallCount, 3)
     }
     
-    
-    
     func test_loadingFeedIndicator_isVisibleWhileLoadingFeed() {
         let (sut, loader) = makeSUT()
         
@@ -309,12 +307,21 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.errorMessage, nil)
     }
 
-    func test_map_createsViewModel() {
+    func test_map_createsFeedPrenterViewModel() {
         let feed = uniqueImages().model
 
         let viewModel = FeedPresenter.map(feed)
 
         XCTAssertEqual(viewModel.feed, feed)
+    }
+    
+    func test_map_createsFeedImagePresenterViewModel() {
+        let image = uniqueImage()
+        
+        let viewModel = FeedImagePresenter.map(image)
+        
+        XCTAssertEqual(viewModel.description, image.description)
+        XCTAssertEqual(viewModel.location, image.location)
     }
     
     func test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed() {

@@ -48,6 +48,7 @@ extension FeedSnapshotTests {
 extension XCTestCase {
     
     func assert(snapshot: UIImage, named name: String, file: StaticString = #file, line: UInt = #line) {
+//        RunLoop.main.run(until: .now + 1)
         let snapshotURL = makeSnapshotURL(named: name, file: file)
         let snapshotData = makeSnapshotData(for: snapshot, file: file, line: line)
         
@@ -161,7 +162,7 @@ final class SnapshotWindow: UIWindow {
 extension FeedViewController {
     func display(_ stubs: [ImageStub]) {
         let cells: [FeedImageCellController] = stubs.map { stub in
-            let cellController = FeedImageCellController(delegate: stub)
+            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
             stub.controller = cellController
             return cellController
         }
@@ -171,20 +172,28 @@ extension FeedViewController {
 }
 
 class ImageStub: FeedImageCellControllerDelegate {
-    let viewModel: FeedImageViewModel<UIImage>
+    let viewModel: FeedImageViewModel
+    let image: UIImage?
     weak var controller: FeedImageCellController?
     
     init(description: String?, location: String?, image: UIImage?) {
         viewModel = FeedImageViewModel(
             description: description,
-            location: location,
-            image: image,
-            isLoading: false,
-            shouldRetry: image == nil)
+            location: location
+        )
+        self.image = image
+
     }
     
     func didRequestImage() {
-        controller?.display(viewModel)
+        controller?.display(ResourceLoadingViewModel(isLoading: false))
+        
+        if let image = image {
+            controller?.display(image)
+            controller?.display(ResourceErrorViewModel(message: .none))
+        } else {
+            controller?.display(ResourceErrorViewModel(message: "any"))
+        }
     }
     
     func didCancelImageRequest() {}
