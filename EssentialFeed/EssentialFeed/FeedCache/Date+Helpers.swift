@@ -8,15 +8,15 @@
 import Foundation
 
 public extension Date {
-    func adding(days: Int) -> Date? {
-        Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)
+    func adding(days: Int, calendar: Calendar = Calendar(identifier: .gregorian)) -> Date? {
+        calendar.date(byAdding: .day, value: days, to: self)
     }
     
-    func adding(minutes: Int) -> Date? {
-        adding(seconds: 60 * minutes)
+    func adding(minutes: Int, calendar: Calendar = Calendar(identifier: .gregorian)) -> Date? {
+        adding(seconds: 60 * minutes, calendar: calendar)
     }
 
-    func adding(seconds: Int) -> Date? {
-        Calendar(identifier: .gregorian).date(byAdding: .second, value: seconds, to: self)
+    func adding(seconds: Int, calendar: Calendar = Calendar(identifier: .gregorian)) -> Date? {
+        calendar.date(byAdding: .second, value: seconds, to: self)
     }
 }
