@@ -309,6 +309,14 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.errorMessage, nil)
     }
 
+    func test_map_createsViewModel() {
+        let feed = uniqueImages().model
+
+        let viewModel = FeedPresenter.map(feed)
+
+        XCTAssertEqual(viewModel.feed, feed)
+    }
+    
     func test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed() {
         let image0 = makeImage()
         let image1 = makeImage()
