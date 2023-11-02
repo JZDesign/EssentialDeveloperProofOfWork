@@ -8,15 +8,15 @@
 import EssentialFeed
 
 
-protocol FeedLoadingView {
+public protocol FeedLoadingView {
     func display(_ viewModel: FeedLoadingViewModel)
 }
 
-protocol FeedView {
+public protocol FeedView {
     func display(_ viewModel: FeedViewModel)
 }
 
-protocol FeedErrorView {
+public protocol FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel)
 }
 

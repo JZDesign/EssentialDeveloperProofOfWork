@@ -1,5 +1,5 @@
 //
-//  LoadResoucePresenter.swift
+//  LoadResourcePresenter.swift
 //  EssentialFeediOS
 //
 //  Created by Jacob Rakidzich on 11/2/23.
@@ -28,26 +28,17 @@ public final class LoadResourcePresenter {
         self.errorView = errorView
     }
 
-    public static var title: String {
-        NSLocalizedString(
-            "FEED_VIEW_TITLE",
-            tableName: "Feed",
-            bundle: Bundle(for: FeedPresenter.self),
-            comment: "Title for the feed view"
-        )
-    }
-
-    public func didStartLoadingFeed() {
+    public func didStartLoading() {
         errorView.display(.noError)
         loadingView.display(FeedLoadingViewModel(isLoading: true))
     }
 
-    public func didFinishLoadingFeed(with feed: [FeedImage]) {
+    public func didFinishLoading(with feed: [FeedImage]) {
         feedView.display(FeedViewModel(feed: feed))
         loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
 
-    public func didFinishLoadingFeed(with error: Error) {
+    public func didFinishLoading(with error: Error) {
         errorView.display(.error(message: feedLoadError))
         loadingView.display(FeedLoadingViewModel(isLoading: false))
     }
