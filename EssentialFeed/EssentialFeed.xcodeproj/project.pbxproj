@@ -37,6 +37,8 @@
 		4233C20E2AF2E8E400A8DD14 /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C20D2AF2E8E300A8DD14 /* HTTPClientSpy.swift */; };
 		4233C2132AF3E3ED00A8DD14 /* LoadResourcePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C2122AF3E3ED00A8DD14 /* LoadResourcePresenter.swift */; };
 		4233C2162AF3E4B000A8DD14 /* LoadResourcePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C2152AF3E4B000A8DD14 /* LoadResourcePresenterTests.swift */; };
+		4233C2182AF3EB3C00A8DD14 /* Shared.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4233C2172AF3EB3C00A8DD14 /* Shared.xcstrings */; };
+		4233C21A2AF3ECE300A8DD14 /* SharedLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C2192AF3ECE300A8DD14 /* SharedLocalizationTests.swift */; };
 		424A6A212AE2FABC00B4F319 /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424A6A192AE2FABC00B4F319 /* EssentialFeediOS.framework */; };
 		426367B92AD8652800950C17 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426367B02AD8652800950C17 /* EssentialFeed.framework */; };
 		426367BE2AD8652800950C17 /* EssentialFeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426367BD2AD8652800950C17 /* EssentialFeedTests.swift */; };
@@ -188,6 +190,8 @@
 		4233C20D2AF2E8E300A8DD14 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
 		4233C2122AF3E3ED00A8DD14 /* LoadResourcePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresenter.swift; sourceTree = "<group>"; };
 		4233C2152AF3E4B000A8DD14 /* LoadResourcePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresenterTests.swift; sourceTree = "<group>"; };
+		4233C2172AF3EB3C00A8DD14 /* Shared.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Shared.xcstrings; sourceTree = "<group>"; };
+		4233C2192AF3ECE300A8DD14 /* SharedLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTests.swift; sourceTree = "<group>"; };
 		424A6A192AE2FABC00B4F319 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		424A6A202AE2FABC00B4F319 /* EssentialFeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		424A6A2E2AE2FB4200B4F319 /* EssentialFeediOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = EssentialFeediOS.xctestplan; sourceTree = "<group>"; };
@@ -310,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				422319DD2AE6DE320003C2EE /* Assets.xcassets */,
+				4233C2172AF3EB3C00A8DD14 /* Shared.xcstrings */,
 				422F2AE32AE6ED6600233FE0 /* Feed.xcstrings */,
 				42DED8EE2AE6BE680093EF6C /* Presenters */,
 				42DED8E92AE6B5B30093EF6C /* ViewModels */,
@@ -337,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				4233C2152AF3E4B000A8DD14 /* LoadResourcePresenterTests.swift */,
+				4233C2192AF3ECE300A8DD14 /* SharedLocalizationTests.swift */,
 			);
 			path = "Shared Presenters";
 			sourceTree = "<group>";
@@ -825,6 +831,7 @@
 			files = (
 				422F2AE42AE6ED6600233FE0 /* Feed.xcstrings in Resources */,
 				422319DE2AE6DE320003C2EE /* Assets.xcassets in Resources */,
+				4233C2182AF3EB3C00A8DD14 /* Shared.xcstrings in Resources */,
 				42DED8F62AE6DAD40093EF6C /* Feed.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -912,6 +919,7 @@
 				4233C2002AF2C9B400A8DD14 /* SnapshotTestHelpers.swift in Sources */,
 				42E83D822AE5F23A007E404B /* XCTestCase+Helpers.swift in Sources */,
 				4233C1FB2AF2C3AA00A8DD14 /* FeedSnapshotTests.swift in Sources */,
+				4233C21A2AF3ECE300A8DD14 /* SharedLocalizationTests.swift in Sources */,
 				42DED8DE2AE698FE0093EF6C /* FeedViewControllerTests+Helpers.swift in Sources */,
 				42DED8CD2AE6845F0093EF6C /* UITestHelpers.swift in Sources */,
 				422F2AE62AE6EE5B00233FE0 /* LocalizationTests.swift in Sources */,
