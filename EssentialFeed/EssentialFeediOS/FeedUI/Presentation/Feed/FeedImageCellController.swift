@@ -54,6 +54,11 @@ public final class FeedImageCellController: NSObject, ResourceView, ResourceLoad
         cancelLoad()
     }
     
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        self.cell = cell as? FeedImageCell
+        delegate.didRequestImage()
+    }
+    
     func cancelLoad() {
         releaseCellForReuse()
         delegate.didCancelImageRequest()
@@ -86,12 +91,12 @@ extension UITableView {
 extension UIImageView {
     func setImageAnimated(_ newImage: UIImage?) {
         image = newImage
-//        
-//        guard newImage != nil else { return }
-//        
-//        alpha = 0
-//        UIView.animate(withDuration: 0.25) {
-//            self.alpha = 1
-//        }
+        
+        guard newImage != nil else { return }
+        
+        alpha = 0
+        UIView.animate(withDuration: 0.25) {
+            self.alpha = 1
+        }
     }
 }
