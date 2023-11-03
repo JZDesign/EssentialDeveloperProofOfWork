@@ -8,7 +8,6 @@
 import XCTest
 import UIKit
 import Combine
-import EssentialApp
 import EssentialFeed
 import EssentialFeediOS
 
