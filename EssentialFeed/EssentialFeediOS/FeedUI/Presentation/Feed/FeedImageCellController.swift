@@ -38,6 +38,9 @@ public final class FeedImageCellController: NSObject, ResourceView, ResourceLoad
         cell?.onRetry = { [weak self] in
             self?.delegate.didRequestImage()
         }
+        cell?.onReuse = { [weak self] in
+            self?.releaseCellForReuse()
+        }
         delegate.didRequestImage()
         return cell!
     }

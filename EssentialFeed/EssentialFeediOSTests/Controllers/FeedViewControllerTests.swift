@@ -388,4 +388,19 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertFalse(view0!.isShowingRetryAction, "Expected no retry when image loads successfully after view becomes visible again")
         XCTAssertFalse(view0!.isShowingImageLoadingIndicator, "Expected no loading indicator when image loads successfully after view becomes visible again")
     }
+    
+    func test_feedImageView_doesNotShowDataFromPreviousRequestWhenCellIsReused() throws {
+        let (sut, loader) = makeSUT()
+        
+        sut.simulateAppearance()
+        loader.completeFeedLoading(with: [makeImage(), makeImage()])
+        
+        let view0 = try XCTUnwrap(sut.simulateFeedImageViewVisible(at: 0))
+        view0.prepareForReuse()
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completeImageLoading(with: imageData0, at: 0)
+        
+        XCTAssertNil(view0.renderedImage, "Expected no image state change for reused view once image loading completes successfully")
+    }
 }
