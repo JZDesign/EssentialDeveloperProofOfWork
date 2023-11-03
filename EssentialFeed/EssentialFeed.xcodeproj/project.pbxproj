@@ -58,7 +58,6 @@
 		42C3F4E72AE9AFE700F53443 /* FeedCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3F4E62AE9AFE700F53443 /* FeedCache.swift */; };
 		42C3F4F12AE9B63800F53443 /* FeedImageDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3F4F02AE9B63800F53443 /* FeedImageDataTask.swift */; };
 		42DED8C72AE601130093EF6C /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426367B02AD8652800950C17 /* EssentialFeed.framework */; platformFilter = ios; };
-		42DED8C82AE601130093EF6C /* EssentialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 426367B02AD8652800950C17 /* EssentialFeed.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42DED8CD2AE6845F0093EF6C /* UITestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DED8CC2AE6845F0093EF6C /* UITestHelpers.swift */; };
 		42DED8CF2AE68B9B0093EF6C /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DED8CE2AE68B9B0093EF6C /* ListViewController.swift */; };
 		42DED8D12AE68C810093EF6C /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DED8D02AE68C810093EF6C /* FeedImageCell.swift */; };
@@ -154,20 +153,6 @@
 			remoteInfo = EssentialFeed;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		42DED8CB2AE601130093EF6C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				42DED8C82AE601130093EF6C /* EssentialFeed.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		422319DD2AE6DE320003C2EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -699,7 +684,6 @@
 				424A6A152AE2FABC00B4F319 /* Sources */,
 				424A6A162AE2FABC00B4F319 /* Frameworks */,
 				424A6A172AE2FABC00B4F319 /* Resources */,
-				42DED8CB2AE601130093EF6C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1144,7 +1128,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1178,7 +1162,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
