@@ -11,7 +11,7 @@ import EssentialApp
 import EssentialFeed
 import EssentialFeediOS
 
-class CommentsUIIntegrationTests: FeedViewControllerTests {
+class CommentsUIIntegrationTests: FeedUIIntegrationTests {
 
     override func test_feedView_hasTitle() {
         let (sut, _) = makeSUT()

@@ -22,7 +22,7 @@ extension XCTestCase {
     }
 }
 
-extension FeedViewControllerTests {
+extension FeedUIIntegrationTests {
     
     func assertThat(_ sut: ListViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
