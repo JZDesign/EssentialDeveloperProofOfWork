@@ -13,7 +13,7 @@ import EssentialFeediOS
 
 extension XCTestCase {
     func localized(_ key: String, table: String = "Feed", file: StaticString = #file, line: UInt = #line) -> String {
-        let bundle = Bundle(for: FeedViewController.self)
+        let bundle = Bundle(for: ListViewController.self)
         let value = bundle.localizedString(forKey: key, value: nil, table: table)
         if value == key {
             XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
@@ -24,14 +24,13 @@ extension XCTestCase {
 
 extension FeedViewControllerTests {
     
-    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = createAndTrackMemoryLeaks(LoaderSpy(), file: file, line: line)
         let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImageDataPublisher), file: file, line: line)
-        sut.prepareForFirstAppearance()
         return (sut, loader)
     }
     
-    func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+    func assertThat(_ sut: ListViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
 
         guard sut.numberOfRenderedFeedImageViews() == feed.count else {
@@ -44,7 +43,7 @@ extension FeedViewControllerTests {
         RunLoop.main.run(until: Date() + 1) // clean up instances
     }
     
-    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
+    func assertThat(_ sut: ListViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
         let view = sut.feedImageView(at: index)
         
         guard let cell = view as? FeedImageCell else {

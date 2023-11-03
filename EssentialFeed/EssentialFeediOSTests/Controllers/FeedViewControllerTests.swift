@@ -15,7 +15,7 @@ final class FeedViewControllerTests: XCTestCase {
     func test_feedView_hasTitle() {
         let (sut, _) = makeSUT()
         
-        sut.loadViewIfNeeded()
+        sut.simulateAppearance()
         
         XCTAssertEqual(sut.title, localized("FEED_VIEW_TITLE"))
     }
@@ -23,7 +23,7 @@ final class FeedViewControllerTests: XCTestCase {
     func test_errorView_doesNotRenderErrorOnLoad() {
         let (sut, _) = makeSUT()
 
-        sut.loadViewIfNeeded()
+        sut.simulateAppearance()
 
         XCTAssertEqual(sut.errorMessage, nil)
     }
@@ -62,6 +62,7 @@ final class FeedViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         
         sut.simulateAppearance()
+
         XCTAssertTrue(sut.isShowingLoadingIndicator)
 
         loader.completeFeedLoading()
@@ -72,6 +73,19 @@ final class FeedViewControllerTests: XCTestCase {
 
         loader.completeFeedLoadingWithError(at: 1)
         XCTAssertFalse(sut.isShowingLoadingIndicator, "failed completion of load hides indicator")
+    }
+    
+    func test_tapOnErrorView_hidesErrorMessage() {
+        let (sut, loader) = makeSUT()
+
+        sut.simulateAppearance()
+        XCTAssertEqual(sut.errorMessage, nil)
+
+        loader.completeFeedLoadingWithError(at: 0)
+        XCTAssertEqual(sut.errorMessage, "Couldn\'t connect to server")
+
+        sut.simulateErrorViewTap()
+        XCTAssertEqual(sut.errorMessage, nil)
     }
     
     func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {

@@ -9,9 +9,10 @@ import UIKit
 import EssentialFeed
 @testable import EssentialFeediOS
 
-extension FeedViewController {
+extension ListViewController {
     func simulateAppearance() {
         if !isViewLoaded {
+            prepareForFirstAppearance()
             loadViewIfNeeded()
         }
         

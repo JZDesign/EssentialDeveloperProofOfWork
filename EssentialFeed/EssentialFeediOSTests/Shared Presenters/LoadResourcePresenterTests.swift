@@ -115,12 +115,3 @@ class LoadResourcePresenterTests: XCTestCase {
     }
     
 }
-
-extension FeedImage : Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(url)
-        hasher.combine(location)
-        hasher.combine(description)
-    }
-}

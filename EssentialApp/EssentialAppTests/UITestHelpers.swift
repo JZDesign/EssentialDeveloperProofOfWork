@@ -39,7 +39,7 @@ extension FeedImageCell {
     }
 }
 
-extension FeedViewController {
+extension ListViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
     }
@@ -49,7 +49,7 @@ extension FeedViewController {
     }
     
     var errorMessage: String? {
-        errorView?.message
+        errorView.message
     }
     
     var isShowingLoadingIndicator: Bool {
@@ -103,7 +103,7 @@ extension FeedViewController {
     }
 }
 
-extension FeedViewController {
+extension ListViewController {
     func simulateAppearance() {
         if !isViewLoaded {
             loadViewIfNeeded()
