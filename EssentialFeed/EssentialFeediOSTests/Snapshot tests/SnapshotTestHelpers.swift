@@ -48,7 +48,6 @@ extension FeedSnapshotTests {
 extension XCTestCase {
     
     func assert(snapshot: UIImage, named name: String, file: StaticString = #file, line: UInt = #line) {
-//        RunLoop.main.run(until: .now + 1)
         let snapshotURL = makeSnapshotURL(named: name, file: file)
         let snapshotData = makeSnapshotData(for: snapshot, file: file, line: line)
         
@@ -162,7 +161,7 @@ final class SnapshotWindow: UIWindow {
 extension ListViewController {
     func display(_ stubs: [ImageStub]) {
         let cells: [CellController] = stubs.map { stub in
-            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
+            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub) { }
             stub.controller = cellController
             return CellController(id: UUID(), cellController)
         }

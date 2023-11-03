@@ -147,12 +147,13 @@ class CommentsUIIntegrationTests: XCTestCase {
                     }).eraseToAnyPublisher()
             })
             
-            sut?.loadViewIfNeeded()
+            sut?.simulateAppearance()
         }
         
         XCTAssertEqual(cancelCallCount, 0)
         
         sut = nil
+        RunLoop.main.run(until: .now)
         
         XCTAssertEqual(cancelCallCount, 1)
     }
