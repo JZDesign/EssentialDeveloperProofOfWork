@@ -17,7 +17,7 @@ class FeedUIIntegrationTests: XCTestCase {
         
         sut.simulateAppearance()
         
-        XCTAssertEqual(sut.title, localized("FEED_VIEW_TITLE"))
+        XCTAssertEqual(sut.title, feedTitle)
     }
     
     func test_errorView_doesNotRenderErrorOnLoad() {
@@ -82,7 +82,7 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.errorMessage, nil)
 
         loader.completeFeedLoadingWithError(at: 0)
-        XCTAssertEqual(sut.errorMessage, "Couldn\'t connect to server")
+        XCTAssertEqual(sut.errorMessage, loadError)
 
         sut.simulateErrorViewTap()
         XCTAssertEqual(sut.errorMessage, nil)

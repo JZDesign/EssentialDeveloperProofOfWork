@@ -7,7 +7,7 @@
 
 import XCTest
 import EssentialFeed
-import EssentialFeediOS
+@testable import EssentialFeediOS
 
 class SharedLocalizationTests: XCTestCase {
     
@@ -17,12 +17,7 @@ class SharedLocalizationTests: XCTestCase {
         assertLocalizedKeyAndValuesExist(in: bundle, table)
 
     }
-    
-    private class DummyView: ResourceView {
-        func display(_ viewModel: Any) {}
-    }
-    
-    // MARK: - Helpers
+        
 }
 
 private typealias LocalizedBundle = (bundle: Bundle, localization: String)
@@ -70,5 +65,23 @@ func assertLocalizedKeyAndValuesExist(in presentationBundle: Bundle, _ table: St
                 XCTFail("Missing \(language) (\(localization)) localized string for key: '\(key)' in table: '\(table)'", file: file, line: line)
             }
         }
+    }
+}
+
+extension XCTestCase {
+    var feedTitle: String {
+        FeedPresenter.title
+    }
+    
+    var commentsTitle: String {
+        ImageCommentsPresenter.title
+    }
+    
+    var loadError: String {
+        LoadResourcePresenter<Any, DummyView>.loadError
+    }
+
+    class DummyView: ResourceView {
+        func display(_ viewModel: Any) {}
     }
 }
