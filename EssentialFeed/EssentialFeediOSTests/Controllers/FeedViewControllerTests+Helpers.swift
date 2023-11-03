@@ -24,12 +24,6 @@ extension XCTestCase {
 
 extension FeedViewControllerTests {
     
-    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
-        let loader = createAndTrackMemoryLeaks(LoaderSpy(), file: file, line: line)
-        let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImageDataPublisher), file: file, line: line)
-        return (sut, loader)
-    }
-    
     func assertThat(_ sut: ListViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
 

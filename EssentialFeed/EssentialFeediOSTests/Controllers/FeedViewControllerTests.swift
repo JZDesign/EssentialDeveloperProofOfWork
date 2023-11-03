@@ -10,7 +10,7 @@ import UIKit
 import EssentialFeed
 import EssentialFeediOS
 
-final class FeedViewControllerTests: XCTestCase {
+class FeedViewControllerTests: XCTestCase {
 
     func test_feedView_hasTitle() {
         let (sut, _) = makeSUT()
@@ -402,5 +402,26 @@ final class FeedViewControllerTests: XCTestCase {
         loader.completeImageLoading(with: imageData0, at: 0)
         
         XCTAssertNil(view0.renderedImage, "Expected no image state change for reused view once image loading completes successfully")
+    }
+    
+    func test_loadFeedCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.simulateAppearance()
+        
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeFeedLoading(at: 0)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    
+    // MARK: - Helpers
+    
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
+        let loader = createAndTrackMemoryLeaks(LoaderSpy(), file: file, line: line)
+        let sut = createAndTrackMemoryLeaks(FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImageDataPublisher), file: file, line: line)
+        return (sut, loader)
     }
 }
