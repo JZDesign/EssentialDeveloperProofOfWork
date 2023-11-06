@@ -33,11 +33,6 @@ public final class CoreDataFeedStore {
         }
     }
     
-    func performAsync(_ action: @escaping (NSManagedObjectContext) -> Void) {
-        let context = self.context
-        context.perform { action(context) }
-    }
-    
     func performSync<R>(_ action: (NSManagedObjectContext) -> Result<R, Error>) throws -> R {
         let context = self.context
         var result: Result<R, Error>!
@@ -60,32 +55,32 @@ public final class CoreDataFeedStore {
 
 extension CoreDataFeedStore: FeedStore {
     
-    public func retrieve(completion: @escaping RetrievalCompletion) {
-        performAsync { context in
-            completion(Result {
+    public func retrieve() throws -> CachedFeed? {
+        try performSync { context in
+            Result {
                 try ManagedCache.find(in: context).map {
                     CachedFeed(images: $0.localFeed, timestamp: $0.timestamp)
                 }
-            })
+            }
         }
     }
     
-    public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-        performAsync { context in
-            completion(Result {
+    public func insert(_ feed: [LocalFeedImage], timestamp: Date) throws {
+        try performSync { context in
+            Result {
                 let managedCache = try ManagedCache.newUniqueInstance(in: context)
                 managedCache.timestamp = timestamp
                 managedCache.feed = ManagedFeedImage.images(from: feed, in: context)
                 try context.save()
-            })
+            }
         }
     }
     
-    public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-        performAsync { context in
-            completion(Result {
+    public func deleteCachedFeed() throws {
+        try performSync { context in
+            Result {
                 try ManagedCache.deleteCache(in: context)
-            })
+            }
         }
     }
     
