@@ -20,7 +20,7 @@ jobs:
       run: xcodebuild test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI_macos" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk macosx -destination "platform=macOS" ONLY_ACTIVE_ARCH=YES
   build_ios:
 
-    runs-on: macos-13-arm64
+    runs-on: macos-13
 
     steps:
     - uses: actions/checkout@v2

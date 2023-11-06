@@ -5,7 +5,7 @@
 //  Created by Jacob Rakidzich on 10/13/23.
 //
 
-import EssentialFeed
+@testable import EssentialFeed
 import Foundation
 import XCTest
 
