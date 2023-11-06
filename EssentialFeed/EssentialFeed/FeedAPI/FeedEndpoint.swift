@@ -13,7 +13,6 @@ public enum FeedEndpoint {
     public func url(baseURL: URL) -> URL {
         switch self {
         case let .get(image):
-            return baseURL.appendingPathComponent("/v1/feed")
             var components = URLComponents()
             components.scheme = baseURL.scheme
             components.host = baseURL.host
