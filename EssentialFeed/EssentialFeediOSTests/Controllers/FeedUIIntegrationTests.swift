@@ -321,14 +321,6 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.errorMessage, nil)
     }
     
-    func test_map_createsFeedPrenterViewModel() {
-        let feed = uniqueImages().model
-        
-        let viewModel = FeedPresenter.map(feed)
-        
-        XCTAssertEqual(viewModel.feed, feed)
-    }
-    
     func test_map_createsFeedImagePresenterViewModel() {
         let image = uniqueImage()
         
