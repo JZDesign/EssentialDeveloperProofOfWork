@@ -21,50 +21,35 @@ public class LocalFeedLoader: FeedCache  {
     }
     
     public func load(completion: @escaping (LoadResult) -> Void) {
-        store.retrieve { [weak self] in
-            guard let self else { return }
-            switch $0 {
-            case let .success(.some(feed)) where FeedCachePolicy.validate(feed.timestamp, againstDate: self.currentDate()):
-                completion(.success(feed.images.map(\.asModel)))
-            case let .failure(error):
-                completion(.failure(error))
-            case .success:
-                completion(.success([]))
+        completion(LoadResult {
+            if let cache = try store.retrieve(), FeedCachePolicy.validate(cache.timestamp, againstDate: currentDate()) {
+                return cache.images.map(\.asModel)
             }
-        }
+            return []
+        })
     }
     
     public func save(_ images: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedFeed { [weak self] deletionResult in
-            guard let self else { return }
-            switch deletionResult {
-            case .success:
-                self.cache(images, with: completion)
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        completion(SaveResult {
+            try store.deleteCachedFeed()
+            try store.insert(images.map(\.asLocal), timestamp: currentDate())
+        })
     }
+
+    private struct InvalidCache: Error {}
     
     public func validateCache(completion: @escaping (ValidationResult) -> Void) {        
-        store.retrieve { [weak self] in
-            guard let self else { return }
-            switch $0 {
-            case .failure:
-                self.store.deleteCachedFeed(completion: completion)
-            case let .success(.some(feed)) where !FeedCachePolicy.validate(feed.timestamp, againstDate: self.currentDate()):
-                self.store.deleteCachedFeed(completion: completion)
-            case .success:
-                completion(.success(()))
+        completion(
+            ValidationResult {
+                do {
+                    if let cache = try store.retrieve(), !FeedCachePolicy.validate(cache.timestamp, againstDate: currentDate()) {
+                        throw InvalidCache()
+                    }
+                } catch {
+                    try store.deleteCachedFeed()
+                }
             }
-        }
-    }
-    
-    private func cache(_ images: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
-        store.insert(images.map(\.asLocal), timestamp: currentDate()) { [weak self] result in
-            guard self != nil else { return }
-            completion(result)
-        }
+        )
     }
     
 }
