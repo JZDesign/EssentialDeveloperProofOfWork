@@ -8,7 +8,7 @@
 import EssentialFeed
 import EssentialFeediOS
 
-class InMemoryFeedStore: FeedStore, FeedImageDataStore {
+class InMemoryFeedStore: FeedStore {
     private(set) var feedCache: CachedFeed?
     private var feedImageDataCache: [URL: Data] = [:]
 
@@ -50,4 +50,17 @@ class InMemoryFeedStore: FeedStore, FeedImageDataStore {
     static var withNonExpiredFeedCache: InMemoryFeedStore {
         InMemoryFeedStore(feedCache: CachedFeed(images: [], timestamp: Date()))
     }
+}
+
+
+extension InMemoryFeedStore: FeedImageDataStore {
+    
+    func insert(_ data: Data, for url: URL) throws {
+        feedImageDataCache[url] = data
+    }
+    
+    func retrieve(dataForURL url: URL) throws -> Data? {
+        feedImageDataCache[url]
+    }
+    
 }
