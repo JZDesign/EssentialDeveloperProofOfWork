@@ -9,52 +9,56 @@ import Foundation
 import EssentialFeed
 
 class FeedStoreSpy: FeedStore {
-    var deletionCompletions = [FeedStore.DeletionCompletion]()
-    var insertionCompletions = [FeedStore.InsertionCompletion]()
-    var retrievalCompletions = [FeedStore.RetrievalCompletion]()
+    private var deletionResult: Result<Void, Error>?
+    private var insertionResult: Result<Void, Error>?
+    private var retrievalResult: Result<CachedFeed?, Error>?
     private(set) var receivedMessages = [ReceivedMessage]()
     
-    func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-        deletionCompletions.append(completion)
+    func deleteCachedFeed() throws {
         receivedMessages.append(.deleteCachedFeed)
+        try deletionResult?.get()
     }
     
-    func insert(_ images: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-        insertionCompletions.append(completion)
+    func completeDeletion(with error: EquatableError) {
+        deletionResult = .failure(error)
+    }
+    
+    func completeDeletionSuccessfully() {
+        deletionResult = .success(())
+    }
+    
+    func insert(_ images: [LocalFeedImage], timestamp: Date) throws {
         receivedMessages.append(.insert(images, timestamp))
+        try insertionResult?.get()
     }
     
-    func retrieve(completion: @escaping RetrievalCompletion) {
-        retrievalCompletions.append(completion)
+    func completeInsertion(with error: EquatableError) {
+        insertionResult = .failure(error)
+    }
+    
+    func completeInsertionSuccessfully() {
+        insertionResult = .success(())
+    }
+    
+    func retrieve() throws -> CachedFeed? {
         receivedMessages.append(.retrieve)
+        return try retrievalResult?.get()
     }
     
-    func completeRetrievalWithEmptyCache(at index: Int = 0) {
-        retrievalCompletions[index](.success(.none))
+    func completeRetrieval(with error: EquatableError) {
+        retrievalResult = .failure(error)
     }
     
-    func completeRetrieval(with error: EquatableError, at index: Int = 0) {
-        retrievalCompletions[index](.failure(error))
+    func completeRetrievalWithEmptyCache() {
+        retrievalResult = .success(.none)
     }
     
-    func completeRetrievalSuccessfully(with images: [LocalFeedImage], timestamp: Date = .now, at index: Int = 0) {
-        retrievalCompletions[index](.success(CachedFeed(images: images, timestamp: timestamp)))
+    func completeRetrieval(with images: [LocalFeedImage], timestamp: Date) {
+        retrievalResult = .success(CachedFeed(images: images, timestamp: timestamp))
     }
     
-    func completeDeletion(with error: EquatableError, at index: Int = 0) {
-        deletionCompletions[index](.failure(error))
-    }
-    
-    func completeInsertion(with error: EquatableError, at index: Int = 0) {
-        insertionCompletions[index](.failure(error))
-    }
-    
-    func completeDeletionSuccessfully(at index: Int = 0) {
-        deletionCompletions[index](.success(()))
-    }
-    
-    func completeInsertionSuccessfully(at index: Int = 0) {
-        insertionCompletions[index](.success(()))
+    func completeRetrievalSuccessfully(with images: [LocalFeedImage], timestamp: Date = .now) {
+        completeRetrieval(with: images, timestamp: timestamp)
     }
     
     enum ReceivedMessage: Equatable {

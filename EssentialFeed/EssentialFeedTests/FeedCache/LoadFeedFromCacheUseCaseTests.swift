@@ -120,6 +120,7 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
     ) {
         
         let expectation = expectation(description: #function)
+        action()
         
         sut.load { recievedResult in
             switch (recievedResult, expectedResult) {
@@ -138,7 +139,6 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
             expectation.fulfill()
         }
         
-        action()
         wait(for: [expectation], timeout: 2)
     }
 }
