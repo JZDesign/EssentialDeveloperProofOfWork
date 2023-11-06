@@ -14,8 +14,8 @@ public protocol FeedStore {
 }
 
 public struct CachedFeed: Equatable {
-    let images: [LocalFeedImage]
-    let timestamp: Date
+    public let images: [LocalFeedImage]
+    public let timestamp: Date
 
     public init(images: [LocalFeedImage], timestamp: Date) {
         self.images = images

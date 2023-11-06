@@ -16,6 +16,18 @@ class InMemoryFeedStore: FeedStore {
         self.feedCache = feedCache
     }
     
+    func deleteCachedFeed() throws {
+        feedCache = nil
+    }
+    
+    func insert(_ feed: [EssentialFeed.LocalFeedImage], timestamp: Date) throws {
+        feedCache = CachedFeed(images: feed + (feedCache?.images ?? []), timestamp: timestamp)
+    }
+    
+    func retrieve() throws -> EssentialFeed.CachedFeed? {
+        feedCache
+    }
+
     static var empty: InMemoryFeedStore {
         InMemoryFeedStore()
     }
