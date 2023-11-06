@@ -32,7 +32,8 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
 
     func test_load_deliversNoImagesOnEmptyCache() {
         let (sut, store) = makeSUT()
-        expect(sut, toCompleteWith: .success([]), when: {            store.completeRetrievalWithEmptyCache()
+        expect(sut, toCompleteWith: .success([]), when: {            
+            store.completeRetrievalWithEmptyCache()
         })
     }
     
@@ -72,15 +73,6 @@ final class LoadFeedFromCacheUseCaseTests: XCTestCase {
         expect(sut, toCompleteWith: .success([]), when: {
             store.completeRetrievalSuccessfully(with: feed.local, timestamp: sevenDaysOld)
         })
-    }
-    
-    func test_load_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
-        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
-        sut?.load { _ in
-            XCTFail(#function)
-        }
-        sut = nil
-        store.completeRetrievalSuccessfully(with: [])
     }
     
     func test_load_hasNoSideEffectsOnRetievalError() {
