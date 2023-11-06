@@ -24,6 +24,8 @@
 		422F2B042AE8A3F400233FE0 /* CacheFeedImageDataUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422F2B032AE8A3F400233FE0 /* CacheFeedImageDataUseCaseTests.swift */; };
 		422F2B062AE8A46C00233FE0 /* FeedImageDataStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422F2B052AE8A46C00233FE0 /* FeedImageDataStoreSpy.swift */; };
 		422F2B082AE8A57E00233FE0 /* CoreDataFeedImageDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422F2B072AE8A57E00233FE0 /* CoreDataFeedImageDataStoreTests.swift */; };
+		42302C322AF9251000B3E5BF /* LoadMoreCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42302C312AF9251000B3E5BF /* LoadMoreCellController.swift */; };
+		42302C342AF9252B00B3E5BF /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42302C332AF9252B00B3E5BF /* LoadMoreCell.swift */; };
 		4233C1FB2AF2C3AA00A8DD14 /* FeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C1FA2AF2C3AA00A8DD14 /* FeedSnapshotTests.swift */; };
 		4233C1FE2AF2C49600A8DD14 /* snapshots in Resources */ = {isa = PBXBuildFile; fileRef = 4233C1FD2AF2C49600A8DD14 /* snapshots */; };
 		4233C2002AF2C9B400A8DD14 /* SnapshotTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C1FF2AF2C9B400A8DD14 /* SnapshotTestHelpers.swift */; };
@@ -173,6 +175,8 @@
 		422F2B032AE8A3F400233FE0 /* CacheFeedImageDataUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedImageDataUseCaseTests.swift; sourceTree = "<group>"; };
 		422F2B052AE8A46C00233FE0 /* FeedImageDataStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataStoreSpy.swift; sourceTree = "<group>"; };
 		422F2B072AE8A57E00233FE0 /* CoreDataFeedImageDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedImageDataStoreTests.swift; sourceTree = "<group>"; };
+		42302C312AF9251000B3E5BF /* LoadMoreCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCellController.swift; sourceTree = "<group>"; };
+		42302C332AF9252B00B3E5BF /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
 		4233C1FA2AF2C3AA00A8DD14 /* FeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSnapshotTests.swift; sourceTree = "<group>"; };
 		4233C1FD2AF2C49600A8DD14 /* snapshots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = snapshots; sourceTree = "<group>"; };
 		4233C1FF2AF2C9B400A8DD14 /* SnapshotTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTestHelpers.swift; sourceTree = "<group>"; };
@@ -328,6 +332,14 @@
 				4233C21B2AF403E300A8DD14 /* CombineHelpers.swift */,
 			);
 			path = Presentation;
+			sourceTree = "<group>";
+		};
+		42302C302AF9250300B3E5BF /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				42302C312AF9251000B3E5BF /* LoadMoreCellController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		4233C1F92AF2C39800A8DD14 /* Snapshot tests */ = {
@@ -513,6 +525,7 @@
 				42DED8F52AE6DAD40093EF6C /* Feed.storyboard */,
 				422F2AF22AE806BE00233FE0 /* ErrorView.swift */,
 				422F2AF62AE8094D00233FE0 /* UIRefreshControl+Update.swift */,
+				42302C332AF9252B00B3E5BF /* LoadMoreCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -520,6 +533,7 @@
 		42DED8DF2AE699980093EF6C /* FeedUI */ = {
 			isa = PBXGroup;
 			children = (
+				42302C302AF9250300B3E5BF /* Controllers */,
 				422F2AE72AE6EEED00233FE0 /* Presentation */,
 				42DED8D62AE697B40093EF6C /* Views */,
 			);
@@ -932,9 +946,11 @@
 				4233C22E2AF4165800A8DD14 /* CellController.swift in Sources */,
 				4233C2212AF40C1000A8DD14 /* ImageCommentsPresenter.swift in Sources */,
 				422F2AF12AE6EFBE00233FE0 /* MainQueueDispatchDecorator.swift in Sources */,
+				42302C342AF9252B00B3E5BF /* LoadMoreCell.swift in Sources */,
 				422F2AED2AE6EF7400233FE0 /* FeedViewAdapter.swift in Sources */,
 				42DED8F02AE6BE720093EF6C /* FeedPresenter.swift in Sources */,
 				42DED8D32AE6920C0093EF6C /* UIView+Shimmering.swift in Sources */,
+				42302C322AF9251000B3E5BF /* LoadMoreCellController.swift in Sources */,
 				422F2AF72AE8094D00233FE0 /* UIRefreshControl+Update.swift in Sources */,
 				42DED8CF2AE68B9B0093EF6C /* ListViewController.swift in Sources */,
 				422F2AF32AE806BE00233FE0 /* ErrorView.swift in Sources */,
