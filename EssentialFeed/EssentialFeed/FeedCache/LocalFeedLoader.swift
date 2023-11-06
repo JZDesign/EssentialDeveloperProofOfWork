@@ -9,7 +9,6 @@ import Foundation
 
 public class LocalFeedLoader: FeedCache  {
     public typealias ValidationResult = Result<Void, Error>
-    public typealias LoadResult = Swift.Result<[FeedImage], Error>
 
     let store: FeedStore
     let currentDate: () -> Date
@@ -19,13 +18,11 @@ public class LocalFeedLoader: FeedCache  {
         self.currentDate = currentDate
     }
     
-    public func load(completion: @escaping (LoadResult) -> Void) {
-        completion(LoadResult {
-            if let cache = try store.retrieve(), FeedCachePolicy.validate(cache.timestamp, againstDate: currentDate()) {
-                return cache.images.map(\.asModel)
-            }
-            return []
-        })
+    public func load() throws -> [FeedImage] {
+        if let cache = try store.retrieve(), FeedCachePolicy.validate(cache.timestamp, againstDate: currentDate()) {
+            return cache.images.map { $0.asModel }
+        }
+        return []
     }
     
     public func save(_ feed: [FeedImage]) throws {
