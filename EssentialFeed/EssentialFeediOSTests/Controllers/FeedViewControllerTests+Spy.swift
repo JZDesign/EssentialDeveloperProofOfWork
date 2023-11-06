@@ -17,8 +17,11 @@ extension FeedUIIntegrationTests {
         // MARK: - FeedLoader
         
         private var feedRequests = [PassthroughSubject<Paginated<FeedImage>, Error>]()
-        private(set) var loadMoreCallCount = 0
+        private var loadMoreRequests = [PassthroughSubject<Paginated<FeedImage>, Error>]()
 
+        var loadMoreCallCount: Int {
+            loadMoreRequests.count
+        }
         var loadFeedCallCount: Int {
             feedRequests.count
         }
@@ -27,7 +30,11 @@ extension FeedUIIntegrationTests {
             feedRequests[index].send(
                 Paginated(
                     items: images,
-                    loadMore: { [weak self] _ in self?.loadMoreCallCount += 1 }
+                    loadMorePublisher: { [weak self] in
+                        let publisher = PassthroughSubject<Paginated<FeedImage>, Error>()
+                        self?.loadMoreRequests.append(publisher)
+                        return publisher.eraseToAnyPublisher()
+                    }
                 )
             )
         }
@@ -36,6 +43,21 @@ extension FeedUIIntegrationTests {
             feedRequests[index].send(completion: .failure(error))
         }
         
+        func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at index: Int = 0) {
+            loadMoreRequests[index].send(Paginated(
+                items: feed,
+                loadMorePublisher: lastPage ? nil : { [weak self] in
+                    let publisher = PassthroughSubject<Paginated<FeedImage>, Error>()
+                    self?.loadMoreRequests.append(publisher)
+                    return publisher.eraseToAnyPublisher()
+                }))
+        }
+
+        func completeLoadMoreWithError(at index: Int = 0) {
+            let error = NSError(domain: "an error", code: 0)
+            loadMoreRequests[index].send(completion: .failure(error))
+        }
+
         // MARK: - FeedImageDataLoader
         
         func loadPublisher() -> AnyPublisher<Paginated<FeedImage>, Error> {
