@@ -17,7 +17,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
         let (sut, store) = makeSUT()
         store.completeDeletion(with: .init())
-        sut.save(uniqueImages().model) { _ in }
+        try? sut.save(uniqueImages().model)
                 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
@@ -27,7 +27,7 @@ final class CachedFeedUseCaseTests: XCTestCase {
         let timestamp = Date.now
         let (sut, store) = makeSUT(currentDate: { timestamp })
         store.completeDeletionSuccessfully()
-        sut.save(images.model) { _ in }
+        try? sut.save(images.model)
                 
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(images.local, timestamp)])
     }
@@ -72,18 +72,10 @@ final class CachedFeedUseCaseTests: XCTestCase {
     }
     
     func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: EquatableError?, file: StaticString = #file, line: UInt = #line, when action: () -> Void) {
-        var recievedError: Error?
-        
-        let expectation = expectation(description: #function)
-        action()
-        
-        sut.save([]) { _result in
-            if case let Result.failure(error) = _result { recievedError = error }
-            expectation.fulfill()
+        do {
+            try sut.save(uniqueImages().model)
+        } catch {
+            XCTAssertEqual(error as? EquatableError, expectedError, file: file, line: line)
         }
-        
-        wait(for: [expectation], timeout: 2)
-
-        XCTAssertEqual(expectedError, recievedError as? EquatableError, file: file, line: line)
     }
 }

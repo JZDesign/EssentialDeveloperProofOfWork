@@ -8,7 +8,6 @@
 import Foundation
 
 public class LocalFeedLoader: FeedCache  {
-    public typealias SaveResult = FeedCache.Result
     public typealias ValidationResult = Result<Void, Error>
     public typealias LoadResult = Swift.Result<[FeedImage], Error>
 
@@ -29,11 +28,9 @@ public class LocalFeedLoader: FeedCache  {
         })
     }
     
-    public func save(_ images: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        completion(SaveResult {
-            try store.deleteCachedFeed()
-            try store.insert(images.map(\.asLocal), timestamp: currentDate())
-        })
+    public func save(_ feed: [FeedImage]) throws {
+        try store.deleteCachedFeed()
+        try store.insert(feed.map(\.asLocal), timestamp: currentDate())
     }
 
     private struct InvalidCache: Error {}
