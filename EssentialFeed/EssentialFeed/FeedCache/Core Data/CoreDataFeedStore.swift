@@ -141,14 +141,17 @@ class ManagedFeedImage: NSManagedObject {
     @NSManaged var cache: ManagedCache
     
     static func images(from localFeed: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
-        NSOrderedSet(array: localFeed.map { local in
+        let images = NSOrderedSet(array: localFeed.map { local in
             let managed = ManagedFeedImage(context: context)
             managed.id = local.id
             managed.imageDescription = local.description
             managed.location = local.location
             managed.url = local.imageURL
+            managed.data = context.userInfo[local.imageURL] as? Data
             return managed
         })
+        context.userInfo.removeAllObjects()
+        return images
     }
     
     static func first(with url: URL, in context: NSManagedObjectContext) throws -> ManagedFeedImage? {
@@ -161,5 +164,11 @@ class ManagedFeedImage: NSManagedObject {
     
     var local: LocalFeedImage {
         LocalFeedImage(id: id, description: imageDescription, location: location, imageURL: url)
+    }
+    
+    override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        managedObjectContext?.userInfo[url] = data
     }
 }
