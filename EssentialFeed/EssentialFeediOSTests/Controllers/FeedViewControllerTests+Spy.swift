@@ -17,13 +17,19 @@ extension FeedUIIntegrationTests {
         // MARK: - FeedLoader
         
         private var feedRequests = [PassthroughSubject<Paginated<FeedImage>, Error>]()
+        private(set) var loadMoreCallCount = 0
 
         var loadFeedCallCount: Int {
             feedRequests.count
         }
         
         func completeFeedLoading(with images: [FeedImage] = [], at index: Int = 0) {
-            feedRequests[index].send(Paginated(items: images))
+            feedRequests[index].send(
+                Paginated(
+                    items: images,
+                    loadMore: { [weak self] _ in self?.loadMoreCallCount += 1 }
+                )
+            )
         }
         
         func completeFeedLoadingWithError(error: EquatableError = .init(), at index: Int = 0) {
