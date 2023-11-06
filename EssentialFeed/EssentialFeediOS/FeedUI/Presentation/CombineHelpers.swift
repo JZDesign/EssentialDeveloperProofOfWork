@@ -37,3 +37,15 @@ private extension FeedImageDataCache {
         save(data, for: url) { _ in }
     }
 }
+
+public extension Paginated {
+    var loadMorePublisher: (() -> AnyPublisher<Self, Error>)? {
+        guard let loadMore = loadMore else { return nil }
+
+        return {
+            Deferred {
+                Future(loadMore)
+            }.eraseToAnyPublisher()
+        }
+    }
+}
