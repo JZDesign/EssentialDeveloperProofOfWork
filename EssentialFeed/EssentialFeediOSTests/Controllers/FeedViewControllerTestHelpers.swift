@@ -102,6 +102,14 @@ extension ListViewController {
         delegate?.tableView?(tableView, willDisplay: view, forRowAt: index)
     }
 
+    var isShowingLoadMoreFeedIndicator: Bool {
+        loadMoreFeedCell()?.isLoading == true
+    }
+
+    private func loadMoreFeedCell() -> LoadMoreCell? {
+        cell(row: 0, section: feedLoadMoreSection) as? LoadMoreCell
+    }
+
     // MARK: - Comments
     
     func numberOfRenderedComments() -> Int {
