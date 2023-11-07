@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/jacobrakidzich/Documents/Github/EssentialDeveloper/ProofOfWork/ProofOfWork/CI_ios2.xctestplan">
+   </FileRef>
+   <FileRef
       location = "container:EssentialApp/EssentialApp.xcodeproj">
    </FileRef>
    <FileRef

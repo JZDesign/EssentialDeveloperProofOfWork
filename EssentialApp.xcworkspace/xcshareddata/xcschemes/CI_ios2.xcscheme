@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:../EssentialApp/CI_ios/CI_ios.xctestplan"
+            reference = "container:CI_ios2.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
