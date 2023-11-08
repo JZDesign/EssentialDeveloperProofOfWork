@@ -11,7 +11,7 @@ import EssentialFeediOS
 class ImageCommentsLocalizationTests: XCTestCase {
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
         let table = "ImageComments"
-        let bundle = EssentialFeediOSBundle.get()
+        let bundle = EssentialFeediOSBundle.testBundle
 
         assertLocalizedKeyAndValuesExist(in: bundle, table)
     }

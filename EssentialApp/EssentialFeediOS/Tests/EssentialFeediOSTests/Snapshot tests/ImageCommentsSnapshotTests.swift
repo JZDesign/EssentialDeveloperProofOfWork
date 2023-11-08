@@ -24,7 +24,7 @@ class ImageCommentsSnapshotTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT() -> ListViewController {
-        let storyboard = UIStoryboard(name: "ImageComments", bundle: EssentialFeediOSBundle.get())
+        let storyboard = UIStoryboard(name: "ImageComments", bundle: EssentialFeediOSBundle.testBundle)
         let controller = storyboard.instantiateInitialViewController() as! ListViewController
         controller.loadViewIfNeeded()
         controller.tableView.showsVerticalScrollIndicator = false

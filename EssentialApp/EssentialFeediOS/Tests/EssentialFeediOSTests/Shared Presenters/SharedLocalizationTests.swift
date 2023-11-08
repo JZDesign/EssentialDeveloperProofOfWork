@@ -13,7 +13,7 @@ class SharedLocalizationTests: XCTestCase {
     
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
         let table = "Shared"
-        assertLocalizedKeyAndValuesExist(in: EssentialFeediOSBundle.get(), table)
+        assertLocalizedKeyAndValuesExist(in: EssentialFeediOSBundle.testBundle, table)
     }
         
 }

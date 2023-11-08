@@ -54,7 +54,7 @@ class FeedSnapshotTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT() -> ListViewController {
-        let storyboard = UIStoryboard(name: "Feed", bundle: EssentialFeediOSBundle.get())
+        let storyboard = UIStoryboard(name: "Feed", bundle: EssentialFeediOSBundle.testBundle)
         let controller = storyboard.instantiateInitialViewController() as! ListViewController
         controller.simulateAppearance()
         controller.tableView.showsVerticalScrollIndicator = false

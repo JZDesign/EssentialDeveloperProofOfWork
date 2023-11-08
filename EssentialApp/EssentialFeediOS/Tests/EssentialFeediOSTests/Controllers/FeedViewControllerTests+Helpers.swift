@@ -13,7 +13,7 @@ import EssentialFeediOS
 
 extension XCTestCase {
     func localized(_ key: String, table: String = "Feed", file: StaticString = #file, line: UInt = #line) -> String {
-        let bundle = EssentialFeediOSBundle.get()
+        let bundle = EssentialFeediOSBundle.testBundle
         let value = bundle.localizedString(forKey: key, value: nil, table: table)
         if value == key {
             XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
