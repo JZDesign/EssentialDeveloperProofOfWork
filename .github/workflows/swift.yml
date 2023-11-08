@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build & Test macOS
-      run: xcodebuild test -package EssentialApp/EssentialFeed CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk macosx -destination "platform=macOS" ONLY_ACTIVE_ARCH=YES
+      run: xcodebuild test -project EssentialApp/EssentialApp.xcodeproj -scheme "CI_macos" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk macosx -destination "platform=macOS" ONLY_ACTIVE_ARCH=YES
   build_ios:
 
     runs-on: macos-13
