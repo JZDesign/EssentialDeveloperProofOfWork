@@ -5,6 +5,7 @@
 //  Created by Jacob Rakidzich on 10/25/23.
 //
 
+import Foundation
 import EssentialFeed
 
 public class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
